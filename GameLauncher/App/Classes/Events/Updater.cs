@@ -83,39 +83,26 @@ namespace GameLauncher.App.Classes.Events {
 
                                     IniFile _settingFile = new IniFile("Settings.ini");
 
-
-                                        if (_settingFile.Read("IgnoreUpdateVersion") == updater.Payload.LatestVersion)
-                                        {
-                                            //Do Nothing Launcher
-                                        }
-                                        else
-                                        {
+                                    if (_settingFile.Read("IgnoreUpdateVersion") == updater.Payload.LatestVersion)
+                                    {
+                                        //No Update Popup
+                                    }
+                                    else
+                                    {
                                         DialogResult updateConfirm = new UpdatePopup(updater).ShowDialog();
 
-                                            if (updateConfirm == DialogResult.OK)
+                                        if (updateConfirm == DialogResult.OK)
+                                        {
+                                            if (File.Exists("GameLauncherUpdater.exe"))
                                             {
-                                                if (File.Exists("GameLauncherUpdater.exe"))
-                                                {
-                                                    Process.Start(@"GameLauncherUpdater.exe", Process.GetCurrentProcess().Id.ToString());
-                                                }
-                                                else
-                                                {
-                                                    Process.Start(@"https://github.com/worldunitedgg/GameLauncher_NFSW/releases/latest");
-                                                }
-                                            };
-                                            if (updateConfirm == DialogResult.No)
+                                                Process.Start(@"GameLauncherUpdater.exe", Process.GetCurrentProcess().Id.ToString());
+                                            }
+                                            else
                                             {
-                                                try
-                                                {
-                                                    _settingFile.Write("IgnoreUpdateVersion", Value: updater.Payload.LatestVersion);
-                                                }
-                                                catch
-                                                {
-                                                    _settingFile.Write("IgnoreUpdateVersion", Application.ProductVersion);
-                                                }
-                                            };
-                                        }
-                                        
+                                                Process.Start(@"https://github.com/SoapboxRaceWorld/GameLauncher_NFSW/releases/latest");
+                                            }
+                                        };
+                                    }   
                                 }
                             } else {
                                 text.Text = "Launcher Status - GitHub Error";
