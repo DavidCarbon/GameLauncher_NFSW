@@ -22,6 +22,7 @@ namespace GameLauncher.App.Classes.Events {
         Label text;
         Label description;
 
+
         public LauncherUpdateCheck(PictureBox statusImage, Label statusText, Label statusDescription)  {
             status = statusImage;
             text = statusText;
@@ -80,15 +81,41 @@ namespace GameLauncher.App.Classes.Events {
                                     text.ForeColor = Color.Yellow;
                                     description.Text = "New Version : " + updater.Payload.LatestVersion;
 
-                                    DialogResult updateConfirm = new UpdatePopup(updater).ShowDialog();
+                                    IniFile _settingFile = new IniFile("Settings.ini");
 
-                                    if(updateConfirm == DialogResult.OK) {
-                                        if (File.Exists("GameLauncherUpdater.exe")) {
-                                            Process.Start(@"GameLauncherUpdater.exe", Process.GetCurrentProcess().Id.ToString());
-                                        } else {
-                                            Process.Start(@"https://github.com/worldunitedgg/GameLauncher_NFSW/releases/latest");
+
+                                        if (_settingFile.Read("IgnoreUpdateVersion") == updater.Payload.LatestVersion)
+                                        {
+                                            //Do Nothing Launcher
                                         }
-                                    };
+                                        else
+                                        {
+                                        DialogResult updateConfirm = new UpdatePopup(updater).ShowDialog();
+
+                                            if (updateConfirm == DialogResult.OK)
+                                            {
+                                                if (File.Exists("GameLauncherUpdater.exe"))
+                                                {
+                                                    Process.Start(@"GameLauncherUpdater.exe", Process.GetCurrentProcess().Id.ToString());
+                                                }
+                                                else
+                                                {
+                                                    Process.Start(@"https://github.com/worldunitedgg/GameLauncher_NFSW/releases/latest");
+                                                }
+                                            };
+                                            if (updateConfirm == DialogResult.No)
+                                            {
+                                                try
+                                                {
+                                                    _settingFile.Write("IgnoreUpdateVersion", Value: updater.Payload.LatestVersion);
+                                                }
+                                                catch
+                                                {
+                                                    _settingFile.Write("IgnoreUpdateVersion", Application.ProductVersion);
+                                                }
+                                            };
+                                        }
+                                        
                                 }
                             } else {
                                 text.Text = "Launcher Status - GitHub Error";

@@ -26,6 +26,7 @@ namespace GameLauncher.App {
             updateLabel.Text = "An update is available. Would you like to update?\nYour version: " + Application.ProductVersion + "\nUpdated version: " + updater.Payload.LatestVersion;
 
             this.update.DialogResult = DialogResult.OK;
+            this.no.DialogResult = DialogResult.No;
         }
     }
 }

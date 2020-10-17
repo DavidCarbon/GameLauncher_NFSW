@@ -38,6 +38,8 @@ using GameLauncher.App.Classes.HashPassword;
 using System.Security;
 using GameLauncher.App.Classes.RPC;
 using GameLauncher.App.Classes.GPU;
+using CommandLine;
+using System.Runtime.CompilerServices;
 //using System.Windows;
 
 namespace GameLauncher {
@@ -113,7 +115,6 @@ namespace GameLauncher {
 
         List<ServerInfo> finalItems = new List<ServerInfo>();
         Dictionary<string, int> serverStatusDictionary = new Dictionary<string, int>();
-        private Konami sequence = new Konami();
 
         //VerifyHash
         public int filesToScan;
@@ -315,7 +316,7 @@ namespace GameLauncher {
             registerText.Click += new EventHandler(registerText_LinkClicked);
 
             this.Load += new EventHandler(mainScreen_Load);
-            email.KeyUp += new KeyEventHandler(Form1_KeyUp);
+
             this.Shown += (x,y) => {
                 if(UriScheme.ForceGame == true) {
                     playButton_Click(x, y);
@@ -425,18 +426,6 @@ namespace GameLauncher {
 
             Log.Debug("Loading ModManager Cache");
             ModManager.LoadModCache();
-        }
-
-        private void Form1_KeyUp(object sender, KeyEventArgs e) {
-            if (sequence.IsCompletedBy(e.KeyCode)) {
-                try {
-                    WMPLib.WindowsMediaPlayer wplayer = new WMPLib.WindowsMediaPlayer();
-                    wplayer.URL = "http://connect.worldonline.pl/easteregg/MadHouseRemix.mp3";
-                    wplayer.controls.play();
-                } catch(Exception ex) {
-                    MessageBox.Show(null, "There was an error showing easteregg.\n" + ex.Message, "GameLauncher", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
         }
 
         private void comboBox1_DrawItem(object sender, DrawItemEventArgs e) {
@@ -664,16 +653,14 @@ namespace GameLauncher {
                 try {
                     WebClientWithTimeout wc = new WebClientWithTimeout();
                     try {
-                       _slresponse2 = wc.DownloadString(Self.CDNUrlList);
+                        _slresponse2 = wc.DownloadString(Self.CDNUrlList);
+                    } catch {
+                        _slresponse2 = wc.DownloadString(Self.CDNUrlStaticList);
                     }
-                    catch {
-                       _slresponse2 = wc.DownloadString(Self.CDNUrlStaticList);
-                    }
-
                 } catch(Exception error) {
-                    MessageBox.Show(error.Message, "An error occurred while loading CDN Lists");
+                    MessageBox.Show(error.Message, "An error occurred while loading CDN List");
                     _slresponse2 = JsonConvert.SerializeObject(new[] {
-                        new CDNObject { name = "[PL] WorldUnited.gg Mirror", url = "http://cdn.worldunited.gg/gamefiles/packed/" }
+                        new CDNObject { name = "[CF] WorldUnited.gg Mirror", url = "http://cdn.worldunited.gg/gamefiles/packed/" }
                     });
                 }
 
@@ -1858,7 +1845,7 @@ namespace GameLauncher {
                 SmallImageKey = _presenceImageKey
             };
 
-            discordRpcClient.SetPresence(_presence);
+            if(discordRpcClient != null) discordRpcClient.SetPresence(_presence);
         }
 
         private void LaunchGame(string userId, string loginToken, string serverIp, Form x) {
@@ -1878,7 +1865,6 @@ namespace GameLauncher {
             var nfswProcess = Process.Start(psi);
             nfswProcess.PriorityClass = ProcessPriorityClass.AboveNormal;
 
-            //if(!DetectLinux.LinuxDetected()) { 
             var processorAffinity = 0;
             for (var i = 0; i < Math.Min(Math.Max(1, Environment.ProcessorCount), 8); i++)
             {
@@ -1992,7 +1978,10 @@ namespace GameLauncher {
 
                                 DialogResult restartApp = MessageBox.Show(null, errorMsg + "\nWould you like to restart the launcher?", "GameLauncher", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                                 if(restartApp == DialogResult.Yes) {
+                                    Properties.Settings.Default.IsRestarting = true;
+                                    Properties.Settings.Default.Save();
                                     Application.Restart();
+                                    Application.ExitThread();
                                 }
                                 this.closebtn_Click(null, null);
                             }));
@@ -2315,6 +2304,11 @@ namespace GameLauncher {
                 discordRpcClient = null;
                 discordRpcClient = new DiscordRpcClient(_serverInfo.DiscordAppId);
                 discordRpcClient.Initialize();
+            }
+
+            if(((ServerInfo)serverPick.SelectedItem).Category == "DEV") {
+                discordRpcClient.Dispose();
+                discordRpcClient = null;
             }
 
             try {
@@ -2725,6 +2719,9 @@ namespace GameLauncher {
             }
             */
             playProgressText.Text = "Ready!".ToUpper();
+            _presence.State = "Ready!";
+            discordRpcClient.SetPresence(_presence);
+
             EnablePlayButton();
 
             extractingProgress.Width = 519;

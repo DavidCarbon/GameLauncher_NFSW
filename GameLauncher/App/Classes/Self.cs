@@ -22,12 +22,11 @@ namespace GameLauncherReborn {
         public static string[] serverlisturl = new string[] {
             mainserver + "/serverlist.json",
             staticapiserver + "/serverlist.json"
-        }; 
+        };
 
-		public static string statsurl = mainserver + "/stats";
+        public static string statsurl = mainserver + "/stats";
         public static string CDNUrlList = mainserver + "/cdn_list.json";
         public static string CDNUrlStaticList = staticapiserver + "/cdn_list.json";
-
 
         private static IniFile SettingFile = new IniFile("Settings.ini");
 
