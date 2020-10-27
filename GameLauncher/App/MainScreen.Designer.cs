@@ -171,7 +171,7 @@
             this.rememberMe.ForeColor = System.Drawing.Color.White;
             this.rememberMe.Location = new System.Drawing.Point(615, 285);
             this.rememberMe.Name = "rememberMe";
-            this.rememberMe.Size = new System.Drawing.Size(159, 19);
+            this.rememberMe.Size = new System.Drawing.Size(158, 19);
             this.rememberMe.TabIndex = 5;
             this.rememberMe.Text = "REMEMBER MY LOGIN";
             this.rememberMe.UseVisualStyleBackColor = false;
@@ -358,7 +358,7 @@
             this.launcherStatusDesc.BackColor = System.Drawing.Color.Transparent;
             this.launcherStatusDesc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.launcherStatusDesc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(134)))), ((int)(((byte)(134)))), ((int)(((byte)(134)))));
-            this.launcherStatusDesc.Location = new System.Drawing.Point(65, 486);
+            this.launcherStatusDesc.Location = new System.Drawing.Point(65, 489);
             this.launcherStatusDesc.Name = "launcherStatusDesc";
             this.launcherStatusDesc.Size = new System.Drawing.Size(146, 13);
             this.launcherStatusDesc.TabIndex = 5;
@@ -512,7 +512,7 @@
             this.ServerStatusDesc.BackColor = System.Drawing.Color.Transparent;
             this.ServerStatusDesc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.ServerStatusDesc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(134)))), ((int)(((byte)(134)))), ((int)(((byte)(134)))));
-            this.ServerStatusDesc.Location = new System.Drawing.Point(260, 486);
+            this.ServerStatusDesc.Location = new System.Drawing.Point(260, 489);
             this.ServerStatusDesc.Name = "ServerStatusDesc";
             this.ServerStatusDesc.Size = new System.Drawing.Size(85, 13);
             this.ServerStatusDesc.TabIndex = 8;
@@ -536,7 +536,7 @@
             // 
             this.ServerStatusIcon.BackColor = System.Drawing.Color.Transparent;
             this.ServerStatusIcon.Image = ((System.Drawing.Image)(resources.GetObject("ServerStatusIcon.Image")));
-            this.ServerStatusIcon.Location = new System.Drawing.Point(229, 478);
+            this.ServerStatusIcon.Location = new System.Drawing.Point(232, 478);
             this.ServerStatusIcon.Name = "ServerStatusIcon";
             this.ServerStatusIcon.Size = new System.Drawing.Size(24, 24);
             this.ServerStatusIcon.TabIndex = 6;
@@ -606,7 +606,7 @@
             this.settingsWordFilterCheck.ForeColor = System.Drawing.Color.DarkGoldenrod;
             this.settingsWordFilterCheck.Location = new System.Drawing.Point(46, 282);
             this.settingsWordFilterCheck.Name = "settingsWordFilterCheck";
-            this.settingsWordFilterCheck.Size = new System.Drawing.Size(235, 17);
+            this.settingsWordFilterCheck.Size = new System.Drawing.Size(234, 17);
             this.settingsWordFilterCheck.TabIndex = 93;
             this.settingsWordFilterCheck.Text = "Disable Word Filtering on Game Chat";
             this.settingsWordFilterCheck.UseVisualStyleBackColor = false;
@@ -630,7 +630,7 @@
             this.settingsProxyCheckbox.ForeColor = System.Drawing.Color.DarkGoldenrod;
             this.settingsProxyCheckbox.Location = new System.Drawing.Point(46, 303);
             this.settingsProxyCheckbox.Name = "settingsProxyCheckbox";
-            this.settingsProxyCheckbox.Size = new System.Drawing.Size(103, 17);
+            this.settingsProxyCheckbox.Size = new System.Drawing.Size(102, 17);
             this.settingsProxyCheckbox.TabIndex = 102;
             this.settingsProxyCheckbox.Text = "Disable Proxy";
             this.settingsProxyCheckbox.UseVisualStyleBackColor = false;
@@ -748,7 +748,7 @@
             this.APIStatusDesc.BackColor = System.Drawing.Color.Transparent;
             this.APIStatusDesc.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.APIStatusDesc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(134)))), ((int)(((byte)(134)))), ((int)(((byte)(134)))));
-            this.APIStatusDesc.Location = new System.Drawing.Point(455, 487);
+            this.APIStatusDesc.Location = new System.Drawing.Point(455, 489);
             this.APIStatusDesc.Name = "APIStatusDesc";
             this.APIStatusDesc.Size = new System.Drawing.Size(85, 13);
             this.APIStatusDesc.TabIndex = 120;
@@ -763,7 +763,7 @@
             this.settingsDiscordRPCCheckbox.ForeColor = System.Drawing.Color.DarkGoldenrod;
             this.settingsDiscordRPCCheckbox.Location = new System.Drawing.Point(46, 326);
             this.settingsDiscordRPCCheckbox.Name = "settingsDiscordRPCCheckbox";
-            this.settingsDiscordRPCCheckbox.Size = new System.Drawing.Size(144, 17);
+            this.settingsDiscordRPCCheckbox.Size = new System.Drawing.Size(143, 17);
             this.settingsDiscordRPCCheckbox.TabIndex = 123;
             this.settingsDiscordRPCCheckbox.Text = "Disable Discord RPC";
             this.settingsDiscordRPCCheckbox.UseVisualStyleBackColor = false;
