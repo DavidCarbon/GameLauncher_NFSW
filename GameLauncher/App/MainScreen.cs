@@ -1373,7 +1373,7 @@ namespace GameLauncher {
         {
             if (hideElements)
             {
-                currentWindowInfo.Text = "Enter your account information to Log In:".ToUpper();
+                currentWindowInfo.Text = "Enter your account information to Log In".ToUpper();
             }
 
             rememberMe.Visible = hideElements;
