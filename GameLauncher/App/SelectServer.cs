@@ -1,41 +1,37 @@
-﻿using Flurl;
-using GameLauncher.App.Classes;
+﻿using GameLauncher.App.Classes;
 using GameLauncher.App.Classes.Logger;
 using GameLauncher.HashPassword;
 using GameLauncherReborn;
 using Newtonsoft.Json;
 using SoapBox.JsonScheme;
 using System;
+using System.Net;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GameLauncher.App {
-    public partial class SelectServer : Form {
+namespace GameLauncher.App
+{
+    public partial class SelectServer : Form
+    {
         private int ID = 1;
         Dictionary<int, GetServerInformation> rememberServerInformationID = new Dictionary<int, GetServerInformation>();
         private GetServerInformation ServerInfo;
+        Dictionary<int, ServerInfo> data = new Dictionary<int, ServerInfo>();
 
+        //Used to ping the Server in ms
         public Queue<string> servers = new Queue<string>();
 
         private readonly IniFile _settingFile = new IniFile("Settings.ini");
 
-        public SelectServer(String windowName = "") {
+        public SelectServer()
+        {
             InitializeComponent();
 
-            if(windowName != "") this.Text = windowName;
-
             //And one for keeping data about server, IP tbh
-            Dictionary<int, ServerInfo> data = new Dictionary<int, ServerInfo>();
-
             ServerListRenderer.View = View.Details;
             ServerListRenderer.FullRowSelect = true;
 
@@ -47,41 +43,52 @@ namespace GameLauncher.App {
 
             ServerListRenderer.Columns.Add("Country");
             ServerListRenderer.Columns[2].Width = 80;
+            ServerListRenderer.Columns[2].TextAlign = HorizontalAlignment.Center;
 
             ServerListRenderer.Columns.Add("Players Online");
             ServerListRenderer.Columns[3].Width = 80;
-            ServerListRenderer.Columns[3].TextAlign = HorizontalAlignment.Right;
+            ServerListRenderer.Columns[3].TextAlign = HorizontalAlignment.Center;
 
             ServerListRenderer.Columns.Add("Registered Players");
             ServerListRenderer.Columns[4].Width = 100;
-            ServerListRenderer.Columns[4].TextAlign = HorizontalAlignment.Right;
+            ServerListRenderer.Columns[4].TextAlign = HorizontalAlignment.Center;
 
             ServerListRenderer.Columns.Add("Ping");
             ServerListRenderer.Columns[5].Width = 55;
-            ServerListRenderer.Columns[5].TextAlign = HorizontalAlignment.Right;
+            ServerListRenderer.Columns[5].TextAlign = HorizontalAlignment.Center;
 
             //Actually accept JSON instead of old format//
             List<ServerInfo> serverInfos = new List<ServerInfo>();
 
-            //foreach (var serverListURL in Self.serverlisturl) {
-                try {
-                    var wc = new WebClientWithTimeout();
-                    var response = wc.DownloadString(Self.serverlisturl[0]);
+            foreach (var serverListURL in Self.serverlisturl)
+            {
+                try
+                {
+                    var wc = new WebClient();
+                    var response = wc.DownloadString(serverListURL);
 
-                    try {
+                    try
+                    {
                         serverInfos.AddRange(JsonConvert.DeserializeObject<List<ServerInfo>>(response));
-                    } catch (Exception error) {
-                        Log.Error("Error occurred while deserializing server list from [" + Self.serverlisturl[0] + "]: " + error.Message);
                     }
-                } catch (Exception error) {
-                    Log.Error("Error occurred while loading server list from [" + Self.serverlisturl[0] + "]: " + error.Message);
+                    catch (Exception error)
+                    {
+                        Log.Error("Error occurred while deserializing server list from [" + serverListURL + "]: " + error.Message);
+                    }
                 }
-            //}
+                catch (Exception error)
+                {
+                    Log.Error("Error occurred while loading server list from [" + serverListURL + "]: " + error.Message);
+                }
+            }
 
-            if (File.Exists("servers.json")) {
+
+            if (File.Exists("servers.json"))
+            {
                 var fileItems = JsonConvert.DeserializeObject<List<ServerInfo>>(File.ReadAllText("servers.json"));
 
-                if (fileItems.Count > 0) {
+                if (fileItems.Count > 0)
+                {
                     fileItems.Select(si => {
                         si.DistributionUrl = "";
                         si.DiscordPresenceKey = "";
@@ -102,21 +109,26 @@ namespace GameLauncher.App {
                     newFinalItems.Add(xServ);
                 }
             }
+            Console.Write(newFinalItems);
 
 
-            foreach (var substring in newFinalItems) {
-                try {
-                        servers.Enqueue(ID + "_|||_" + substring.IpAddress + "_|||_" + substring.Name);
+            foreach (var substring in newFinalItems)
+            {
+                try
+                {
+                    servers.Enqueue(ID + "_|||_" + substring.IpAddress + "_|||_" + substring.Name);
 
-                        ServerListRenderer.Items.Add(new ListViewItem(
-                            new[] {
+                    ServerListRenderer.Items.Add(new ListViewItem(
+                        new[] {
                                 ID.ToString(), substring.Name, "", "", "", "", ""
-                            }
-                        ));
+                        }
+                    ));
 
-                        data.Add(ID, substring);
+                    data.Add(ID, substring);
                     ID++;
-                } catch {
+                }
+                catch
+                {
 
                 }
             }
@@ -124,59 +136,74 @@ namespace GameLauncher.App {
             Thread newList = new Thread(() => {
                 Thread.Sleep(200);
                 this.BeginInvoke((MethodInvoker)delegate {
-                    while(servers.Count != 0) {
+                    while (servers.Count != 0)
+                    {
                         string QueueContent = servers.Dequeue();
                         string[] QueueContent2 = QueueContent.Split(new string[] { "_|||_" }, StringSplitOptions.None);
 
-                        int serverid = Convert.ToInt32(QueueContent2[0])-1;
+                        int serverid = Convert.ToInt32(QueueContent2[0]) - 1;
                         string serverurl = QueueContent2[1] + "/GetServerInformation";
                         string servername = QueueContent2[2];
 
-                        try {
+                        try
+                        {
 
-                            WebClientWithTimeout getdata = new WebClientWithTimeout();
-                            getdata.Timeout(1000);
+                            WebClient getdata = new WebClient();
+                            //getdata.Timeout(8000);
 
                             GetServerInformation content = JsonConvert.DeserializeObject<GetServerInformation>(getdata.DownloadString(serverurl));
 
-                            if (content == null) {
+                            if (content == null)
+                            {
                                 ServerListRenderer.Items[serverid].SubItems[1].Text = servername;
-                                ServerListRenderer.Items[serverid].SubItems[2].Text = "N/A";
-                                ServerListRenderer.Items[serverid].SubItems[3].Text = "N/A";
+                                ServerListRenderer.Items[serverid].SubItems[2].Text = "---";
+                                ServerListRenderer.Items[serverid].SubItems[3].Text = "---";
                                 ServerListRenderer.Items[serverid].SubItems[4].Text = "---";
-                            } else {
+                            }
+                            else
+                            {
                                 ServerListRenderer.Items[serverid].SubItems[1].Text = servername;
-                                ServerListRenderer.Items[serverid].SubItems[2].Text = Self.CountryName(content.country.ToString());
-                                ServerListRenderer.Items[serverid].SubItems[3].Text = content.onlineNumber.ToString();
-                                ServerListRenderer.Items[serverid].SubItems[4].Text = content.numberOfRegistered.ToString();
+                                ServerListRenderer.Items[serverid].SubItems[2].Text = Self.CountryName(content.Country.ToString());
+                                ServerListRenderer.Items[serverid].SubItems[3].Text = content.OnlineNumber.ToString();
+                                ServerListRenderer.Items[serverid].SubItems[4].Text = content.NumberOfRegistered.ToString();
 
                                 //PING
-                                if(!DetectLinux.LinuxDetected()) {
+                                if (!DetectLinux.LinuxDetected())
+                                {
                                     Ping pingSender = new Ping();
                                     Uri StringToUri = new Uri(serverurl);
                                     pingSender.SendAsync(StringToUri.Host, 1000, new byte[1], new PingOptions(64, true), new AutoResetEvent(false));
                                     pingSender.PingCompleted += (sender3, e3) => {
                                         PingReply reply = e3.Reply;
 
-                                        if (reply.Status == IPStatus.Success && servername != "Offline Built-In Server") {
+                                        if (reply.Status == IPStatus.Success && servername != "Offline Built-In Server")
+                                        {
                                             ServerListRenderer.Items[serverid].SubItems[5].Text = reply.RoundtripTime + "ms";
-                                        } else {
+                                        }
+                                        else
+                                        {
                                             ServerListRenderer.Items[serverid].SubItems[5].Text = "---";
                                         }
                                     };
-                                } else {
-                                    ServerListRenderer.Items[serverid].SubItems[5].Text = "---";
+                                }
+                                else
+                                {
+                                    ServerListRenderer.Items[serverid].SubItems[5].Text = "N/A";
                                 }
                             }
-                        } catch {
+                        }
+                        catch
+                        {
                             ServerListRenderer.Items[serverid].SubItems[1].Text = servername;
-                            ServerListRenderer.Items[serverid].SubItems[3].Text = "N/A";
-                            ServerListRenderer.Items[serverid].SubItems[4].Text = "N/A";
+                            ServerListRenderer.Items[serverid].SubItems[2].Text = "---";
+                            ServerListRenderer.Items[serverid].SubItems[3].Text = "---";
+                            ServerListRenderer.Items[serverid].SubItems[4].Text = "---";
                             ServerListRenderer.Items[serverid].SubItems[5].Text = "---";
                         }
 
 
-                        if (servers.Count == 0) {
+                        if (servers.Count == 0)
+                        {
                             loading.Text = "";
                         }
 
@@ -194,24 +221,35 @@ namespace GameLauncher.App {
             };
 
             ServerListRenderer.DoubleClick += new EventHandler((handler, args) => {
-                if (ServerListRenderer.SelectedItems.Count == 1) {
-                    rememberServerInformationID.TryGetValue(ServerListRenderer.SelectedIndices[0], out ServerInfo);
-
-                    MainScreen.ServerName = data[ServerListRenderer.SelectedIndices[0]+1];
-
-                    this.Close();
-                }
+                SelectedGameServerToRemember();
             });
         }
 
-        private void btnAddServer_Click(object sender, EventArgs e)
+        private void BtnAddServer_Click(object sender, EventArgs e)
         {
             new AddServer().Show();
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
+        private void BtnSelectServer_Click(object sender, EventArgs e)
+        {
+            SelectedGameServerToRemember();
+        }
+
+        private void BtnClose_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void SelectedGameServerToRemember()
+        {
+            if (ServerListRenderer.SelectedItems.Count == 1)
+            {
+                rememberServerInformationID.TryGetValue(ServerListRenderer.SelectedIndices[0], out ServerInfo);
+
+                MainScreen.ServerName = data[ServerListRenderer.SelectedIndices[0] + 1];
+
+                this.Close();
+            }
         }
     }
 }

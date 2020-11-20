@@ -7,6 +7,5 @@ A Rewrite of GameLauncher taken from Need For Speed: World
 - [X] Complete UI
 - [X] Original fonts
 
-### FIX WORKAROUND FOR MODNET:
-
-Please follow tutorial wrote by Zacam under "modnetfix.md" file.
+### Screenshot
+![](screenshot.png)
