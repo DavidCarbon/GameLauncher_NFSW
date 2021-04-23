@@ -16,7 +16,8 @@
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>C:\Users\meton\Desktop\TEST\</PublishUrl>
+    <PublishUrl>
+    </PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -43,7 +44,8 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>FFBE7FCB82EC0ECA321C4178759DF231AB1CB712</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>
+    </ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>
@@ -53,7 +55,8 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>GameLauncher_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>false</GenerateManifests>
@@ -65,9 +68,10 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\Release\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -83,8 +87,11 @@
     <Reference Include="CommandLine, Version=2.8.0.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
       <HintPath>..\packages\CommandLineParser.2.8.0\lib\net45\CommandLine.dll</HintPath>
     </Reference>
-    <Reference Include="DiscordRPC, Version=1.0.150.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DiscordRichPresence.1.0.150\lib\net35\DiscordRPC.dll</HintPath>
+    <Reference Include="DiscordRPC, Version=1.0.175.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DiscordRichPresence.1.0.175\lib\net35\DiscordRPC.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetZip, Version=1.15.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.15.0\lib\net40\DotNetZip.dll</HintPath>
     </Reference>
     <Reference Include="Flurl, Version=2.8.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Flurl.2.8.2\lib\net40\Flurl.dll</HintPath>
@@ -108,8 +115,8 @@
     <Reference Include="Nancy.Hosting.Self, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Nancy.Hosting.Self.2.0.0\lib\net452\Nancy.Hosting.Self.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -134,77 +141,104 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="App\About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
     <Compile Include="App\AddServer.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="App\AddServer.Designer.cs">
       <DependentUpon>AddServer.cs</DependentUpon>
     </Compile>
-    <Compile Include="App\Classes\AntiCheat.cs" />
-    <Compile Include="App\Classes\Auth\ClassicAuth.cs" />
-    <Compile Include="App\Classes\Auth\ModernAuth.cs" />
-    <Compile Include="App\Classes\Auth\Tokens.cs" />
-    <Compile Include="App\Classes\CDN.cs" />
-    <Compile Include="App\Classes\Delay.cs" />
-    <Compile Include="App\Classes\DetectLinux.cs" />
-    <Compile Include="App\Classes\Downloader\Downloader.cs" />
-    <Compile Include="App\Classes\Downloader\DownloaderCommand.cs" />
-    <Compile Include="App\Classes\Downloader\DownloaderException.cs" />
-    <Compile Include="App\Classes\Downloader\DownloadFailed.cs" />
-    <Compile Include="App\Classes\Downloader\DownloadFinished.cs" />
-    <Compile Include="App\Classes\Downloader\DownloadManager.cs" />
-    <Compile Include="App\Classes\Downloader\HashManager.cs" />
-    <Compile Include="App\Classes\Downloader\ProgressUpdated.cs" />
-    <Compile Include="App\Classes\Downloader\ShowExtract.cs" />
-    <Compile Include="App\Classes\Downloader\ShowMessage.cs" />
-    <Compile Include="App\Classes\Downloader\UncompressionException.cs" />
-    <Compile Include="App\Classes\Downloader\VerifyCommand.cs" />
-    <Compile Include="App\Classes\Events\UpdaterSchema.cs" />
-    <Compile Include="App\Classes\ExtractResource.cs" />
-    <Compile Include="App\Classes\GPU\init.cs" />
-    <Compile Include="App\Classes\HashPassword\MD5.cs" />
-    <Compile Include="App\Classes\HashPassword\SHA.cs" />
-    <Compile Include="App\Classes\HWID.cs" />
-    <Compile Include="App\Classes\IniFile.cs" />
-    <Compile Include="App\Classes\Language.cs" />
-    <Compile Include="App\Classes\Logger\LogToFile.cs" />
-    <Compile Include="App\Classes\ModManager.cs" />
-    <Compile Include="App\Classes\ModNetReloaded\ElectronModNet.cs" />
-    <Compile Include="App\Classes\ModNetReloaded\ModNetReloaded.cs" />
-    <Compile Include="App\Classes\NativeFunctions.cs" />
-    <Compile Include="App\Classes\Events\Updater.cs" />
-    <Compile Include="App\Classes\NFSW.cs" />
-    <Compile Include="App\Classes\ParseUri.cs" />
-    <Compile Include="App\Classes\ProgressBar.cs">
+    <Compile Include="App\Classes\LauncherCore\AntiCheat.cs" />
+    <Compile Include="App\Classes\LauncherCore\APICheckers\APIStatusChecker.cs" />
+    <Compile Include="App\Classes\LauncherCore\APICheckers\VisualsAPIChecker.cs" />
+    <Compile Include="App\Classes\LauncherCore\Client\Auth\ClassicAuth.cs" />
+    <Compile Include="App\Classes\LauncherCore\Client\Auth\ModernAuth.cs" />
+    <Compile Include="App\Classes\LauncherCore\Client\Auth\Tokens.cs" />
+    <Compile Include="App\Classes\LauncherCore\Downloader\Downloader.cs" />
+    <Compile Include="App\Classes\LauncherCore\Downloader\DownloaderCommand.cs" />
+    <Compile Include="App\Classes\LauncherCore\Downloader\DownloaderException.cs" />
+    <Compile Include="App\Classes\LauncherCore\Downloader\DownloadFailed.cs" />
+    <Compile Include="App\Classes\LauncherCore\Downloader\DownloadFinished.cs" />
+    <Compile Include="App\Classes\LauncherCore\Downloader\DownloadManager.cs" />
+    <Compile Include="App\Classes\LauncherCore\Downloader\HashManager.cs" />
+    <Compile Include="App\Classes\LauncherCore\Downloader\ProgressUpdated.cs" />
+    <Compile Include="App\Classes\LauncherCore\Downloader\ShowExtract.cs" />
+    <Compile Include="App\Classes\LauncherCore\Downloader\ShowMessage.cs" />
+    <Compile Include="App\Classes\LauncherCore\Downloader\UncompressionException.cs" />
+    <Compile Include="App\Classes\LauncherCore\Downloader\VerifyCommand.cs" />
+    <Compile Include="App\Classes\LauncherCore\FileReadWrite\ExtractResource.cs" />
+    <Compile Include="App\Classes\LauncherCore\Hash\MD5.cs" />
+    <Compile Include="App\Classes\LauncherCore\Hash\SHA.cs" />
+    <Compile Include="App\Classes\LauncherCore\FileReadWrite\FileAccountSave.cs" />
+    <Compile Include="App\Classes\LauncherCore\FileReadWrite\FileSettingsSave.cs" />
+    <Compile Include="App\Classes\LauncherCore\FileReadWrite\IniFile.cs" />
+    <Compile Include="App\Classes\LauncherCore\Global\EnumTypes.cs" />
+    <Compile Include="App\Classes\LauncherCore\Global\FunctionEvents.cs" />
+    <Compile Include="App\Classes\LauncherCore\Global\FunctionStatus.cs" />
+    <Compile Include="App\Classes\LauncherCore\Global\URLs.cs" />
+    <Compile Include="App\Classes\LauncherCore\Hash\SHATwoFiveSix.cs" />
+    <Compile Include="App\Classes\LauncherCore\InsiderKit\KitEnabler.cs" />
+    <Compile Include="App\Classes\LauncherCore\LauncherUpdater\Updater.cs" />
+    <Compile Include="App\Classes\LauncherCore\LauncherUpdater\UpdaterExecutable.cs" />
+    <Compile Include="App\Classes\LauncherCore\LauncherUpdater\UpdaterSchema.cs" />
+    <Compile Include="App\Classes\LauncherCore\Lists\CDNListUpdater.cs" />
+    <Compile Include="App\Classes\LauncherCore\Lists\JSON\JsonCDNList.cs" />
+    <Compile Include="App\Classes\LauncherCore\Lists\JSON\JsonLanguage.cs" />
+    <Compile Include="App\Classes\LauncherCore\Lists\JSON\JsonRootCA.cs" />
+    <Compile Include="App\Classes\LauncherCore\Lists\JSON\JsonServerInfo.cs" />
+    <Compile Include="App\Classes\LauncherCore\Lists\JSON\JsonServerList.cs" />
+    <Compile Include="App\Classes\LauncherCore\Lists\LanguageListUpdater.cs" />
+    <Compile Include="App\Classes\LauncherCore\Lists\ServerListUpdater.cs" />
+    <Compile Include="App\Classes\LauncherCore\Logger\LogToFile.cs" />
+    <Compile Include="App\Classes\LauncherCore\ModNet\ModNetLinksCleanup.cs" />
+    <Compile Include="App\Classes\LauncherCore\ModNet\ModNetReloaded.cs" />
+    <Compile Include="App\Classes\LauncherCore\RPC\CarList.cs" />
+    <Compile Include="App\Classes\LauncherCore\RPC\DiscordGamePresence.cs" />
+    <Compile Include="App\Classes\LauncherCore\RPC\DiscordLauncherPresense.cs" />
+    <Compile Include="App\Classes\LauncherCore\RPC\EventList.cs" />
+    <Compile Include="App\Classes\LauncherCore\Validator\Email\IsEmailValid.cs" />
+    <Compile Include="App\Classes\LauncherCore\Validator\JSON\IsJSONValid.cs" />
+    <Compile Include="App\Classes\LauncherCore\Validator\VerifyTrust\IsExeVerified.cs" />
+    <Compile Include="App\Classes\LauncherCore\Visuals\AboutNoteBlock.cs" />
+    <Compile Include="App\Classes\LauncherCore\Visuals\FontWrapper.cs" />
+    <Compile Include="App\Classes\LauncherCore\Visuals\Prompt.cs" />
+    <Compile Include="App\Classes\LauncherCore\Visuals\Theming.cs" />
+    <Compile Include="App\Classes\LauncherCore\Visuals\Time.cs" />
+    <Compile Include="App\Classes\LauncherCore\Visuals\TimeConversions.cs" />
+    <Compile Include="App\Classes\LauncherCore\ModNet\ModManager.cs" />
+    <Compile Include="App\Classes\SystemPlatform\Components\HardwareID.cs" />
+    <Compile Include="App\Classes\SystemPlatform\Components\HardwareInfo.cs" />
+    <Compile Include="App\Classes\SystemPlatform\Linux\DetectLinux.cs" />
+    <Compile Include="App\Classes\SystemPlatform\NativeFunctions.cs" />
+    <Compile Include="App\Classes\LauncherCore\Client\NFSW.cs" />
+    <Compile Include="App\Classes\LauncherCore\Visuals\ProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="App\Classes\Prompt.cs" />
-    <Compile Include="App\Classes\Proxy\CommunicationLog.cs" />
-    <Compile Include="App\Classes\Proxy\NancyBootstrapper.cs" />
-    <Compile Include="App\Classes\Proxy\NancyGzipCompression.cs" />
-    <Compile Include="App\Classes\Proxy\ProxyException.cs" />
-    <Compile Include="App\Classes\Proxy\ProxyHandler.cs" />
-    <Compile Include="App\Classes\RedistributablePackage.cs" />
-    <Compile Include="App\Classes\RPC\CarList.cs" />
-    <Compile Include="App\Classes\RPC\DiscordGamePresence.cs" />
-    <Compile Include="App\Classes\RPC\EventList.cs" />
-    <Compile Include="App\Classes\Self.cs" />
-    <Compile Include="App\Classes\ServerListUpdater.cs" />
-    <Compile Include="App\Classes\ServerProxy.cs" />
-    <Compile Include="App\Classes\Singleton.cs" />
-    <Compile Include="App\Classes\Statuses.cs" />
-    <Compile Include="App\Classes\TaskBar.cs" />
-    <Compile Include="App\Classes\UriExtensions.cs" />
-    <Compile Include="App\Classes\UriScheme.cs" />
-    <Compile Include="App\Classes\WebRequest.cs">
+    <Compile Include="App\Classes\LauncherCore\Proxy\CommunicationLog.cs" />
+    <Compile Include="App\Classes\LauncherCore\Proxy\NancyBootstrapper.cs" />
+    <Compile Include="App\Classes\LauncherCore\Proxy\NancyGzipCompression.cs" />
+    <Compile Include="App\Classes\LauncherCore\Proxy\ProxyException.cs" />
+    <Compile Include="App\Classes\LauncherCore\Proxy\ProxyHandler.cs" />
+    <Compile Include="App\Classes\SystemPlatform\Windows\ManagementSearcher.cs" />
+    <Compile Include="App\Classes\SystemPlatform\Windows\RedistributablePackage.cs" />
+    <Compile Include="App\Classes\LauncherCore\Proxy\ServerProxy.cs" />
+    <Compile Include="App\Classes\LauncherCore\Proxy\Singleton.cs" />
+    <Compile Include="App\Classes\SystemPlatform\Windows\CertificateStore.cs" />
+    <Compile Include="App\Classes\SystemPlatform\TaskBar.cs" />
+    <Compile Include="App\Classes\SystemPlatform\Windows\WindowsProductVersion.cs" />
+    <Compile Include="App\Classes\LauncherCore\Client\Web\WebRequest.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="App\Classes\XMPP\MITM_XMPP.cs" />
-    <Compile Include="App\Debug.cs">
+    <Compile Include="App\DebugScreen.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="App\Debug.Designer.cs">
-      <DependentUpon>Debug.cs</DependentUpon>
+    <Compile Include="App\DebugScreen.Designer.cs">
+      <DependentUpon>DebugScreen.cs</DependentUpon>
     </Compile>
     <Compile Include="App\MainScreen.cs">
       <SubType>Form</SubType>
@@ -212,18 +246,41 @@
     <Compile Include="App\MainScreen.Designer.cs">
       <DependentUpon>MainScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="App\Classes\JsonScheme.cs" />
+    <Compile Include="App\RegisterScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="App\RegisterScreen.Designer.cs">
+      <DependentUpon>RegisterScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="App\SelectServer.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="App\SelectServer.Designer.cs">
       <DependentUpon>SelectServer.cs</DependentUpon>
     </Compile>
+    <Compile Include="App\SettingsScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="App\SettingsScreen.Designer.cs">
+      <DependentUpon>SettingsScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="App\SplashScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="App\SplashScreen.Designer.cs">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="App\UpdatePopup.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="App\UpdatePopup.Designer.cs">
       <DependentUpon>UpdatePopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="App\VerifyHash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="App\VerifyHash.Designer.cs">
+      <DependentUpon>VerifyHash.cs</DependentUpon>
     </Compile>
     <Compile Include="App\WelcomeScreen.cs">
       <SubType>Form</SubType>
@@ -232,35 +289,40 @@
       <DependentUpon>WelcomeScreen.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="App\ShowMap.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="App\ShowMap.Designer.cs">
-      <DependentUpon>ShowMap.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="App\Classes\FontWrapper.cs" />
+    <EmbeddedResource Include="App\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="App\AddServer.resx">
       <DependentUpon>AddServer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="App\Classes\WebRequest.resx">
+    <EmbeddedResource Include="App\Classes\LauncherCore\Client\Web\WebRequest.resx">
       <DependentUpon>WebRequest.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="App\Debug.resx">
-      <DependentUpon>Debug.cs</DependentUpon>
+    <EmbeddedResource Include="App\DebugScreen.resx">
+      <DependentUpon>DebugScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="App\MainScreen.resx">
       <DependentUpon>MainScreen.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="App\RegisterScreen.resx">
+      <DependentUpon>RegisterScreen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="App\SelectServer.resx">
       <DependentUpon>SelectServer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="App\ShowMap.resx">
-      <DependentUpon>ShowMap.cs</DependentUpon>
+    <EmbeddedResource Include="App\SettingsScreen.resx">
+      <DependentUpon>SettingsScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App\SplashScreen.resx">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="App\UpdatePopup.resx">
       <DependentUpon>UpdatePopup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App\VerifyHash.resx">
+      <DependentUpon>VerifyHash.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="App\WelcomeScreen.resx">
       <DependentUpon>WelcomeScreen.cs</DependentUpon>
@@ -271,12 +333,11 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
-    <EmbeddedResource Include="App\Classes\RPC\JSON\events.json" />
-    <EmbeddedResource Include="App\Classes\RPC\JSON\cars.json" />
+    <EmbeddedResource Include="App\Classes\LauncherCore\RPC\JSON\events.json" />
+    <EmbeddedResource Include="App\Classes\LauncherCore\RPC\JSON\cars.json" />
     <EmbeddedResource Include="Fonts\Airport-Cyr.ttf" />
     <EmbeddedResource Include="Fonts\Akrobat-Regular.ttf" />
     <EmbeddedResource Include="Fonts\Akrobat-SemiBold.ttf" />
-    <None Include="GameLauncher_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest">
       <SubType>Designer</SubType>
@@ -295,54 +356,67 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="SoapBoxModules\BootFlow.gfx" />
-    <EmbeddedResource Include="SoapBoxModules\cursor.ani" />
+    <EmbeddedResource Include="Resources\BootScreen\BootFlow.gfx" />
+    <EmbeddedResource Include="Resources\Cursors\Cursor.ani" />
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\registerButton_en.png" />
-    <None Include="Resources\buttons_info.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\playbutton_hover.png" />
-    <None Include="Resources\playbutton_click.png" />
-    <None Include="Resources\playbutton.png" />
-    <None Include="Resources\graybutton_hover.png" />
-    <None Include="Resources\graybutton_click.png" />
-    <None Include="Resources\graybutton.png" />
-    <None Include="Resources\greenbutton_click.png" />
-    <None Include="Resources\greenbutton_hover.png" />
-    <None Include="Resources\greenbutton.png" />
-    <None Include="Resources\register_ticket.png" />
-    <None Include="Resources\register_noticket.png" />
-    <None Include="Resources\webicon.png" />
-    <None Include="Resources\ac_warning.png" />
-    <None Include="Resources\ac_unknown.png" />
-    <None Include="Resources\ac_success.png" />
-    <None Include="Resources\ac_error.png" />
-    <None Include="Resources\logo.png" />
-    <None Include="Resources\loggedbg.png" />
-    <None Include="Resources\warningprogress.png" />
-    <None Include="Resources\loginbg.png" />
-    <None Include="Resources\errorprogress.png" />
-    <None Include="Resources\progressgrayscale.png" />
-    <None Include="Resources\progress.png" />
-    <None Include="Resources\settingsbtn_click.png" />
-    <None Include="Resources\settingsbtn.png" />
-    <None Include="Resources\settingsbtn_hover.png" />
-    <None Include="Resources\secondarybackground.png" />
-    <None Include="Resources\close_click.png" />
-    <None Include="Resources\close.png" />
-    <None Include="Resources\close_hover.png" />
-    <None Include="Resources\tick.png" />
-    <None Include="Resources\map.png" />
     <Content Include="original_icon.ico" />
+    <EmbeddedResource Include="Resources\Fonts\DejaVuSans-Bold.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\DejaVuSans.ttf" />
+    <None Include="Resources\ProgressBars\progress_warning.png" />
+    <None Include="Resources\ProgressBars\progress_success.png" />
+    <None Include="Resources\ProgressBars\progress_preload.png" />
+    <None Include="Resources\ProgressBars\progress_outline.png" />
+    <None Include="Resources\ProgressBars\progress_error.png" />
+    <None Include="Resources\Logo\logo_splash.png" />
+    <None Include="Resources\Logo\logo_main.png" />
+    <None Include="Resources\Inputs\ticket_text_border.png" />
+    <None Include="Resources\Inputs\ticket_error_text_border.png" />
+    <None Include="Resources\Inputs\password_text_border.png" />
+    <None Include="Resources\Inputs\password_error_text_border.png" />
+    <None Include="Resources\Inputs\email_text_border.png" />
+    <None Include="Resources\Inputs\email_error_text_border.png" />
+    <None Include="Resources\Icons\social_twitter_disabled.png" />
+    <None Include="Resources\Icons\social_twitter.png" />
+    <None Include="Resources\Icons\social_home_page_disabled.png" />
+    <None Include="Resources\Icons\social_home_page.png" />
+    <None Include="Resources\Icons\social_facebook_disabled.png" />
+    <None Include="Resources\Icons\social_facebook.png" />
+    <None Include="Resources\Icons\social_discord_disabled.png" />
+    <None Include="Resources\Icons\social_discord.png" />
+    <None Include="Resources\Icons\icon_shield_warning.png" />
+    <None Include="Resources\Icons\icon_shield_unknown.png" />
+    <None Include="Resources\Icons\icon_shield_success.png" />
+    <None Include="Resources\Icons\icon_shield_error.png" />
+    <None Include="Resources\Icons\icon_shield_checking.png" />
+    <None Include="Resources\Icons\icon_gear_hover.png" />
+    <None Include="Resources\Icons\icon_gear_click.png" />
+    <None Include="Resources\Icons\icon_gear.png" />
+    <None Include="Resources\Icons\icon_game_server_unknown.png" />
+    <None Include="Resources\Icons\icon_game_server_online.png" />
+    <None Include="Resources\Icons\icon_game_server_offline.png" />
+    <None Include="Resources\Icons\icon_game_server_checking.png" />
+    <None Include="Resources\Icons\icon_close_hover.png" />
+    <None Include="Resources\Icons\icon_close_click.png" />
+    <None Include="Resources\Icons\icon_close.png" />
+    <None Include="Resources\Icons\icon_api_unknown.png" />
+    <None Include="Resources\Icons\icon_api_online.png" />
+    <None Include="Resources\Icons\icon_api_offline.png" />
+    <None Include="Resources\Icons\icon_api_checking.png" />
+    <None Include="Resources\Buttons\playbutton_hover.png" />
+    <None Include="Resources\Buttons\playbutton_click.png" />
+    <None Include="Resources\Buttons\playbutton.png" />
+    <None Include="Resources\Buttons\greenbutton_hover.png" />
+    <None Include="Resources\Buttons\greenbutton_click.png" />
+    <None Include="Resources\Buttons\greenbutton.png" />
+    <None Include="Resources\Buttons\graybutton_hover.png" />
+    <None Include="Resources\Buttons\graybutton_click.png" />
+    <None Include="Resources\Buttons\graybutton.png" />
+    <None Include="Resources\Backgrounds\Background_USXE.png" />
+    <None Include="Resources\Backgrounds\Background_Social.png" />
+    <None Include="Resources\Backgrounds\Background_Settings.png" />
+    <None Include="Resources\Backgrounds\Background_Register.png" />
+    <None Include="Resources\Backgrounds\Background_Login.png" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -360,4 +434,9 @@
     </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if exist "$(SolutionDir)Keys\Launcher.p12" "C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\signtool.exe" sign /f "$(SolutionDir)Keys\Launcher.p12" /p "Launcher Development CRT" /d "Soapbox Race World" /du "https://soapboxrace.world" /tr http://timestamp.digicert.com /td SHA256 "$(TargetPath)"
+if exist "$(SolutionDir)Keys\Launcher.p12" "C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\signtool.exe" sign /f "$(SolutionDir)Keys\Launcher.p12" /p "Launcher Development CRT" /d "Soapbox Race World" /du "https://soapboxrace.world" /tr http://timestamp.digicert.com /td SHA256 "$(TargetDir)*.dll"
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>

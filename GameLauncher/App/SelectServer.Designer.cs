@@ -1,4 +1,5 @@
-﻿namespace GameLauncher.App
+﻿using System.Windows.Forms;
+namespace GameLauncher.App
 {
     partial class SelectServer
     {
@@ -30,82 +31,135 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectServer));
             this.ServerListRenderer = new System.Windows.Forms.ListView();
-            this.loading = new System.Windows.Forms.Label();
-            this.btnAddServer = new System.Windows.Forms.Button();
-            this.btnClose = new System.Windows.Forms.Button();
+            this.Loading = new System.Windows.Forms.Label();
+            this.BtnAddServer = new System.Windows.Forms.Button();
+            this.BtnSelectServer = new System.Windows.Forms.Button();
+            this.BtnClose = new System.Windows.Forms.Button();
+            this.Version = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // ServerListRenderer
             // 
             this.ServerListRenderer.AutoArrange = false;
+            this.ServerListRenderer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(29)))), ((int)(((byte)(38)))));
             this.ServerListRenderer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ServerListRenderer.Font = new System.Drawing.Font("DejaVu Sans", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ServerListRenderer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(178)))), ((int)(((byte)(210)))), ((int)(((byte)(255)))));
+            this.ServerListRenderer.GridLines = true;
             this.ServerListRenderer.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.ServerListRenderer.HideSelection = false;
-            this.ServerListRenderer.Location = new System.Drawing.Point(12, 12);
+            this.ServerListRenderer.Location = new System.Drawing.Point(13, 13);
             this.ServerListRenderer.MultiSelect = false;
             this.ServerListRenderer.Name = "ServerListRenderer";
-            this.ServerListRenderer.Size = new System.Drawing.Size(546, 256);
+            this.ServerListRenderer.Size = new System.Drawing.Size(544, 229);
             this.ServerListRenderer.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.ServerListRenderer.TabIndex = 0;
             this.ServerListRenderer.UseCompatibleStateImageBehavior = false;
             // 
-            // loading
+            // Loading
             // 
-            this.loading.AutoSize = true;
-            this.loading.Location = new System.Drawing.Point(12, 278);
-            this.loading.Name = "loading";
-            this.loading.Size = new System.Drawing.Size(91, 13);
-            this.loading.TabIndex = 4;
-            this.loading.Text = "Loading servers...";
+            this.Loading.Font = new System.Drawing.Font("DejaVu Sans", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Loading.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(200)))), ((int)(((byte)(0)))));
+            this.Loading.Location = new System.Drawing.Point(220, 242);
+            this.Loading.Name = "Loading";
+            this.Loading.Size = new System.Drawing.Size(120, 13);
+            this.Loading.TabIndex = 4;
+            this.Loading.Text = "Loading servers...";
             // 
-            // btnAddServer
+            // BtnAddServer
             // 
-            this.btnAddServer.Location = new System.Drawing.Point(402, 273);
-            this.btnAddServer.Name = "btnAddServer";
-            this.btnAddServer.Size = new System.Drawing.Size(75, 23);
-            this.btnAddServer.TabIndex = 6;
-            this.btnAddServer.Text = "Add Server";
-            this.btnAddServer.UseVisualStyleBackColor = true;
-            this.btnAddServer.Click += new System.EventHandler(this.BtnAddServer_Click);
+            this.BtnAddServer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(29)))), ((int)(((byte)(38)))));
+            this.BtnAddServer.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(181)))), ((int)(((byte)(191)))));
+            this.BtnAddServer.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(58)))), ((int)(((byte)(76)))));
+            this.BtnAddServer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnAddServer.Font = new System.Drawing.Font("DejaVu Sans", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnAddServer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.BtnAddServer.Location = new System.Drawing.Point(15, 247);
+            this.BtnAddServer.Name = "BtnAddServer";
+            this.BtnAddServer.Size = new System.Drawing.Size(96, 23);
+            this.BtnAddServer.TabIndex = 8;
+            this.BtnAddServer.Text = "Add Server";
+            this.BtnAddServer.UseVisualStyleBackColor = false;
+            this.BtnAddServer.Click += new System.EventHandler(this.BtnAddServer_Click);
             // 
-            // btnClose
+            // BtnSelectServer
             // 
-            this.btnClose.Location = new System.Drawing.Point(483, 273);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(75, 23);
-            this.btnClose.TabIndex = 5;
-            this.btnClose.Text = "Close";
-            this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.BtnClose_Click);
+            this.BtnSelectServer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(29)))), ((int)(((byte)(38)))));
+            this.BtnSelectServer.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(181)))), ((int)(((byte)(191)))));
+            this.BtnSelectServer.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(58)))), ((int)(((byte)(76)))));
+            this.BtnSelectServer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnSelectServer.Font = new System.Drawing.Font("DejaVu Sans", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnSelectServer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.BtnSelectServer.Location = new System.Drawing.Point(399, 247);
+            this.BtnSelectServer.Name = "BtnSelectServer";
+            this.BtnSelectServer.Size = new System.Drawing.Size(75, 23);
+            this.BtnSelectServer.TabIndex = 6;
+            this.BtnSelectServer.Text = "Select";
+            this.BtnSelectServer.UseVisualStyleBackColor = false;
+            this.BtnSelectServer.Click += new System.EventHandler(this.BtnSelectServer_Click);
+            // 
+            // BtnClose
+            // 
+            this.BtnClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(29)))), ((int)(((byte)(38)))));
+            this.BtnClose.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(181)))), ((int)(((byte)(191)))));
+            this.BtnClose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(58)))), ((int)(((byte)(76)))));
+            this.BtnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnClose.Font = new System.Drawing.Font("DejaVu Sans", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.BtnClose.Location = new System.Drawing.Point(480, 247);
+            this.BtnClose.Name = "BtnClose";
+            this.BtnClose.Size = new System.Drawing.Size(75, 23);
+            this.BtnClose.TabIndex = 7;
+            this.BtnClose.Text = "Close";
+            this.BtnClose.UseVisualStyleBackColor = false;
+            this.BtnClose.Click += new System.EventHandler(this.BtnClose_Click);
+            // 
+            // Version
+            // 
+            this.Version.BackColor = System.Drawing.Color.Transparent;
+            this.Version.Font = new System.Drawing.Font("DejaVu Sans", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Version.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.Version.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.Version.Location = new System.Drawing.Point(220, 260);
+            this.Version.Name = "Version";
+            this.Version.Size = new System.Drawing.Size(120, 13);
+            this.Version.TabIndex = 9;
+            this.Version.Text = "Version : vX.X.X.X";
+            this.Version.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // SelectServer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(570, 300);
-            this.Controls.Add(this.btnAddServer);
-            this.Controls.Add(this.btnClose);
-            this.Controls.Add(this.loading);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(36)))), ((int)(((byte)(45)))));
+            this.ClientSize = new System.Drawing.Size(570, 275);
+            this.Controls.Add(this.Version);
+            this.Controls.Add(this.BtnAddServer);
+            this.Controls.Add(this.BtnSelectServer);
+            this.Controls.Add(this.BtnClose);
+            this.Controls.Add(this.Loading);
             this.Controls.Add(this.ServerListRenderer);
+            this.DoubleBuffered = true;
+            this.Font = new System.Drawing.Font("DejaVu Sans", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SelectServer";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Please select a server before continuing...";
+            this.Text = "Please Select a Server - SBRW Launcher";
             this.TopMost = true;
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.ListView ServerListRenderer;
-        private System.Windows.Forms.Label loading;
-        private System.Windows.Forms.Button btnAddServer;
-        private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.Label Loading;
+        private System.Windows.Forms.Button BtnAddServer;
+        private System.Windows.Forms.Button BtnSelectServer;
+        private System.Windows.Forms.Button BtnClose;
+        private System.Windows.Forms.Label Version;
     }
 }
