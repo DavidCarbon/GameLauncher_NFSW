@@ -16,8 +16,7 @@
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>
-    </PublishUrl>
+    <PublishUrl>C:\Users\meton\Desktop\TEST\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -44,8 +43,7 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>
-    </ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>FFBE7FCB82EC0ECA321C4178759DF231AB1CB712</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>
@@ -55,8 +53,7 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>GameLauncher_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>false</GenerateManifests>
@@ -68,10 +65,9 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <OutputPath>bin\Release\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -89,9 +85,6 @@
     </Reference>
     <Reference Include="DiscordRPC, Version=1.0.150.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DiscordRichPresence.1.0.150\lib\net35\DiscordRPC.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetZip, Version=1.15.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetZip.1.15.0\lib\net40\DotNetZip.dll</HintPath>
     </Reference>
     <Reference Include="Flurl, Version=2.8.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Flurl.2.8.2\lib\net40\Flurl.dll</HintPath>
@@ -173,8 +166,10 @@
     <Compile Include="App\Classes\HashPassword\SHA.cs" />
     <Compile Include="App\Classes\HWID.cs" />
     <Compile Include="App\Classes\IniFile.cs" />
+    <Compile Include="App\Classes\Language.cs" />
     <Compile Include="App\Classes\Logger\LogToFile.cs" />
     <Compile Include="App\Classes\ModManager.cs" />
+    <Compile Include="App\Classes\ModNetReloaded\ElectronModNet.cs" />
     <Compile Include="App\Classes\ModNetReloaded\ModNetReloaded.cs" />
     <Compile Include="App\Classes\NativeFunctions.cs" />
     <Compile Include="App\Classes\Events\Updater.cs" />
@@ -197,11 +192,14 @@
     <Compile Include="App\Classes\ServerListUpdater.cs" />
     <Compile Include="App\Classes\ServerProxy.cs" />
     <Compile Include="App\Classes\Singleton.cs" />
+    <Compile Include="App\Classes\Statuses.cs" />
     <Compile Include="App\Classes\TaskBar.cs" />
+    <Compile Include="App\Classes\UriExtensions.cs" />
     <Compile Include="App\Classes\UriScheme.cs" />
     <Compile Include="App\Classes\WebRequest.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="App\Classes\XMPP\MITM_XMPP.cs" />
     <Compile Include="App\Debug.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -234,6 +232,12 @@
       <DependentUpon>WelcomeScreen.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="App\ShowMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="App\ShowMap.Designer.cs">
+      <DependentUpon>ShowMap.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="App\Classes\FontWrapper.cs" />
     <EmbeddedResource Include="App\AddServer.resx">
@@ -252,6 +256,9 @@
     <EmbeddedResource Include="App\SelectServer.resx">
       <DependentUpon>SelectServer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="App\ShowMap.resx">
+      <DependentUpon>ShowMap.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="App\UpdatePopup.resx">
       <DependentUpon>UpdatePopup.cs</DependentUpon>
     </EmbeddedResource>
@@ -269,6 +276,7 @@
     <EmbeddedResource Include="Fonts\Airport-Cyr.ttf" />
     <EmbeddedResource Include="Fonts\Akrobat-Regular.ttf" />
     <EmbeddedResource Include="Fonts\Akrobat-SemiBold.ttf" />
+    <None Include="GameLauncher_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest">
       <SubType>Designer</SubType>
@@ -291,20 +299,17 @@
     <EmbeddedResource Include="SoapBoxModules\cursor.ani" />
   </ItemGroup>
   <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\registerButton_en.png" />
     <None Include="Resources\buttons_info.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\error_text_border.png" />
-    <None Include="Resources\logo_hover.png" />
-    <None Include="Resources\server_unknown.png" />
-    <None Include="Resources\server_online.png" />
-    <None Include="Resources\server_offline.png" />
-    <None Include="Resources\server_checking.png" />
-    <None Include="Resources\api_checking.png" />
-    <None Include="Resources\api_unkown.png" />
-    <None Include="Resources\api_success.png" />
-    <None Include="Resources\api_error.png" />
     <None Include="Resources\playbutton_hover.png" />
     <None Include="Resources\playbutton_click.png" />
     <None Include="Resources\playbutton.png" />

@@ -28,6 +28,8 @@ namespace GameLauncherReborn {
         public static string CDNUrlList = mainserver + "/cdn_list.json";
         public static string CDNUrlStaticList = staticapiserver + "/cdn_list.json";
 
+        private static IniFile SettingFile = new IniFile("Settings.ini");
+
         public static string DiscordRPCID = "540651192179752970";
 
         public static int ProxyPort = new Random().Next(6260, 8269);
@@ -42,7 +44,26 @@ namespace GameLauncherReborn {
         public static string discordid = String.Empty;
         public static string MapZoneRPC = String.Empty;
 
-        public static long GetTimestamp(bool valid = false) {
+        public static void runAsAdmin() {
+            string[] args = Environment.GetCommandLineArgs();
+
+            ProcessStartInfo processStartInfo = new ProcessStartInfo() {
+                Verb = "runas",
+                FileName = Application.ExecutablePath
+            };
+
+            if ((int)args.Length > 0) {
+                processStartInfo.Arguments = args[0];
+            }
+
+            try {
+                Process.Start(processStartInfo);
+            } catch (Exception exception1) {
+                MessageBox.Show("Failed to self-run as admin: " + exception1.Message);
+            }
+        }
+
+        public static long getTimestamp(bool valid = false) {
             long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
 
             if(valid == true) {
@@ -54,7 +75,7 @@ namespace GameLauncherReborn {
             return ticks;
         }
 
-		public static bool HasWriteAccessToFolder(string path) {
+		public static bool hasWriteAccessToFolder(string path) {
 			try {
 				File.Create(path + "temp.txt").Close();
 				File.Delete(path + "temp.txt");
@@ -89,13 +110,13 @@ namespace GameLauncherReborn {
             return "Unknown";
         }
 
-        public static void CenterScreen(Form form) {
+        public static void centerScreen(Form form) {
             form.StartPosition = FormStartPosition.Manual;
             form.Top = (Screen.PrimaryScreen.Bounds.Height - form.Height) / 2;
             form.Left = (Screen.PrimaryScreen.Bounds.Width - form.Width) / 2;
         }
 
-		public static bool ValidateEmail(string email) {
+		public static bool validateEmail(string email) {
 			String theEmailPattern = @"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*"
 								   + "@"
 								   + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$";
@@ -103,7 +124,7 @@ namespace GameLauncherReborn {
 			return Regex.IsMatch(email, theEmailPattern);
 		}
 
-		public static bool IsTempFolder(string directory) {
+		public static bool isTempFolder(string directory) {
 			return directory.Contains("Temp");
 		}
 
@@ -141,7 +162,7 @@ namespace GameLauncherReborn {
             return machineUint == 0x014c;
         }
 
-        public static bool GetInstalledHotFix(string identification) {
+        public static bool getInstalledHotFix(string identification) {
             var search = new ManagementObjectSearcher("SELECT HotFixID FROM Win32_QuickFixEngineering");
             var collection = search.Get();
 
