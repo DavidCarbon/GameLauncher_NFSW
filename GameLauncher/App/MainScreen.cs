@@ -40,8 +40,6 @@ using GameLauncher.App.Classes.LauncherCore.Validator.Email;
 using GameLauncher.App.Classes.LauncherCore.Validator.JSON;
 using GameLauncher.App.Classes.SystemPlatform;
 
-//using System.Windows;
-
 namespace GameLauncher
 {
     public partial class MainScreen : Form 
@@ -1428,23 +1426,34 @@ namespace GameLauncher
 
                 ModNetFileNameInUse = FileName;
 
-                WebClient client2 = new WebClient();
+                try
+                {
+                    FunctionStatus.TLS();
+                    WebClient client2 = new WebClient();
+                    client2.Headers.Add("user-agent", "GameLauncher " + Application.ProductVersion + " (+https://github.com/SoapBoxRaceWorld/GameLauncher_NFSW)");
 
-                client2.DownloadProgressChanged += new DownloadProgressChangedEventHandler(Client_DownloadProgressChanged_RELOADED);
-                client2.DownloadFileCompleted += (test, stuff) => {
-                    Log.Debug("LAUNCHER: Downloaded: " + FileName);
-                    isDownloadingModNetFiles = false;
-                    if (modFilesDownloadUrls.Any() == false)
+                    client2.DownloadProgressChanged += new DownloadProgressChangedEventHandler(Client_DownloadProgressChanged_RELOADED);
+                    client2.DownloadFileCompleted += (test, stuff) =>
                     {
-                        LaunchGame();
-                    }
-                    else
-                    {
-                        //Redownload other file
-                        DownloadModNetFilesRightNow(path);
-                    }
-                };
-                client2.DownloadFileAsync(url, path + "/" + FileName);
+                        Log.Core("LAUNCHER: Downloaded: " + FileName);
+                        isDownloadingModNetFiles = false;
+                        if (modFilesDownloadUrls.Any() == false)
+                        {
+                            LaunchGame();
+                        }
+                        else
+                        {
+                            /* Redownload other file */
+                            DownloadModNetFilesRightNow(path);
+                        }
+                    };
+                    client2.DownloadFileAsync(url, path + "/" + FileName);
+                }
+                catch
+                {
+                    CurrentWindowInfo.Text = string.Format(_loginWelcomeTime + "\n{0}", IsEmailValid.Mask(FileAccountSave.UserRawEmail)).ToUpper();
+                }
+
                 isDownloadingModNetFiles = true;
             }
         }
@@ -1502,44 +1511,118 @@ namespace GameLauncher
                 {
                     DiscordLauncherPresense.Status("Download ModNet", null);
 
-                    /* Get Remote ModNet list to process for checking required ModNet files are present and current */
-                    FunctionStatus.TLS();
-                    String modules = new WebClient().DownloadString(URLs.ModNet + "/launcher-modules/modules.json");
-                    string[] modules_newlines = modules.Split(new string[] { "\n" }, StringSplitOptions.None);
-                    foreach (String modules_newline in modules_newlines)
+                    if (FileSettingsSave.ModNetZip == "0")
                     {
-                        if (modules_newline.Trim() == "{" || modules_newline.Trim() == "}") continue;
-
-                        String trim_modules_newline = modules_newline.Trim();
-                        String[] modules_files = trim_modules_newline.Split(new char[] { ':' });
-
-                        String ModNetList = modules_files[0].Replace("\"", "").Trim();
-                        String ModNetSHA = modules_files[1].Replace("\"", "").Replace(",", "").Trim();
-
-                        if (SHATwoFiveSix.HashFile(FileSettingsSave.GameInstallation + "\\" + ModNetList).ToLower() != ModNetSHA || !File.Exists(FileSettingsSave.GameInstallation + "\\" + ModNetList))
+                        /* Get Remote ModNet list to process for checking required ModNet files are present and current */
+                        String modules = new WebClient().DownloadString(URLs.ModNet + "/launcher-modules/modules.json");
+                        string[] modules_newlines = modules.Split(new string[] { "\n" }, StringSplitOptions.None);
+                        foreach (String modules_newline in modules_newlines)
                         {
-                            PlayProgressText.Text = ("ModNet: Downloading " + ModNetList).ToUpper();
+                            if (modules_newline.Trim() == "{" || modules_newline.Trim() == "}") continue;
 
-                            Log.Warning("MODNET CORE: " + ModNetList + " Does not match SHA Hash on File Server -> Online Hash: '" + ModNetSHA + "'");
+                            String trim_modules_newline = modules_newline.Trim();
+                            String[] modules_files = trim_modules_newline.Split(new char[] { ':' });
 
-                            if (File.Exists(FileSettingsSave.GameInstallation + "\\" + ModNetList))
+                            String ModNetList = modules_files[0].Replace("\"", "").Trim();
+                            String ModNetSHA = modules_files[1].Replace("\"", "").Replace(",", "").Trim();
+
+                            if (SHATwoFiveSix.HashFile(FileSettingsSave.GameInstallation + "\\" + ModNetList).ToLower() != ModNetSHA || !File.Exists(FileSettingsSave.GameInstallation + "\\" + ModNetList))
                             {
-                                File.Delete(FileSettingsSave.GameInstallation + "\\" + ModNetList);
+                                PlayProgressText.Text = ("ModNet: Downloading " + ModNetList).ToUpper();
+
+                                Log.Warning("MODNET CORE: " + ModNetList + " Does not match SHA Hash on File Server -> Online Hash: '" + ModNetSHA + "'");
+
+                                if (File.Exists(FileSettingsSave.GameInstallation + "\\" + ModNetList))
+                                {
+                                    File.Delete(FileSettingsSave.GameInstallation + "\\" + ModNetList);
+                                }
+
+                                FunctionStatus.TLS();
+                                WebClient newModNetFilesDownload = new WebClient();
+                                newModNetFilesDownload.Headers.Add("user-agent", "GameLauncher " + Application.ProductVersion + " (+https://github.com/SoapBoxRaceWorld/GameLauncher_NFSW)");
+                                newModNetFilesDownload.DownloadFile(URLs.ModNet + "/launcher-modules/" + ModNetList, FileSettingsSave.GameInstallation + "/" + ModNetList);
+                            }
+                            else
+                            {
+                                PlayProgressText.Text = ("ModNet: Up to Date " + ModNetList).ToUpper();
+                                Log.Debug("MODNET CORE: " + ModNetList + " Is Up to Date!");
                             }
 
-                            FunctionStatus.TLS();
-                            WebClient newModNetFilesDownload = new WebClient();
-                            newModNetFilesDownload.Headers.Add("user-agent", "GameLauncher " + Application.ProductVersion + " (+https://github.com/SoapBoxRaceWorld/GameLauncher_NFSW)");
-                            newModNetFilesDownload.DownloadFile(URLs.ModNet + "/launcher-modules/" + ModNetList, FileSettingsSave.GameInstallation + "/" + ModNetList);
+                            Application.DoEvents();
+                            PlayProgressText.Text = ("Fetching Server Mods List!").ToUpper();
                         }
-                        else
+                    }
+                    else
+                    {
+                        PlayProgressText.Text = ("ModNet: Downloading ModNet Files ZIP").ToUpper();
+
+                        var ModNetURL = new Uri(URLs.ModNet + "/launcher-modules/ModLoader.zip");
+                        var NewModNetLocation = FileSettingsSave.GameInstallation + "\\ModNetFiles.zip";
+                        var OldModNetLocation = FileSettingsSave.GameInstallation + "\\ModLoader.zip";
+
+                        if (File.Exists(NewModNetLocation))
                         {
-                            PlayProgressText.Text = ("ModNet: Up to Date " + ModNetList).ToUpper();
-                            Log.Debug("MODNET CORE: " + ModNetList + " Is Up to Date!");
+                            File.Delete(NewModNetLocation);
+                        }
+                        else if (File.Exists(OldModNetLocation))
+                        {
+                            File.Delete(OldModNetLocation);
                         }
 
-                        Application.DoEvents();
-                        PlayProgressText.Text = ("Fetching Server Mods List!").ToUpper();
+                        FunctionStatus.TLS();
+                        WebClient Client = new WebClient();
+                        Client.Headers.Add("user-agent", "GameLauncher " + Application.ProductVersion + " (+https://github.com/SoapBoxRaceWorld/GameLauncher_NFSW)");
+                        Client.DownloadFile(ModNetURL, NewModNetLocation);
+                        
+                        try
+                        {
+                            using (var archive = ZipFile.Open(NewModNetLocation, ZipArchiveMode.Read))
+                            {
+                                DirectoryInfo di = Directory.CreateDirectory(FileSettingsSave.GameInstallation);
+                                string destinationDirectoryFullPath = di.FullName;
+
+                                foreach (ZipArchiveEntry file in archive.Entries)
+                                {
+                                    string completeFileName = Path.GetFullPath(Path.Combine(destinationDirectoryFullPath, file.FullName));
+
+                                    if (!completeFileName.StartsWith(destinationDirectoryFullPath, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        Log.Warning("MODNET CORE: Trying to extract file outside of destination directory. See this link for more info: https://snyk.io/research/zip-slip-vulnerability");
+                                    }
+
+                                    if (file.Name == "")
+                                    {
+                                        Directory.CreateDirectory(Path.GetDirectoryName(completeFileName));
+                                        continue;
+                                    }
+
+                                    PlayProgressText.Text = ("ModNet: Extracted File " + file.FullName).ToUpper();
+                                    Log.Debug("MODNET CORE: Extracted File " + file.FullName);
+                                    file.ExtractToFile(completeFileName, true);
+
+                                    Application.DoEvents();
+                                    PlayProgressText.Text = ("Fetching Server Mods List!").ToUpper();
+                                }
+                            }
+                        }
+                        catch (Exception error)
+                        {
+                            Log.Error("MODNET CORE: " + error.Message);
+                            CurrentWindowInfo.Text = string.Format(_loginWelcomeTime + "\n{0}", IsEmailValid.Mask(FileAccountSave.UserRawEmail)).ToUpper();
+                            MessageBox.Show(null, $"There was an error downloading ModNet Files:\n{error.Message}", "GameLauncher", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        finally
+                        {
+                            try
+                            {
+                                File.Delete(NewModNetLocation);
+                            }
+                            catch (Exception error)
+                            {
+                                Log.Error("MODNET CORE: Unable to Delete ZIP File - " + error);
+                            }
+                        }
                     }
 
                     /* get files now */

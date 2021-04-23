@@ -9,7 +9,6 @@ using System.Xml;
 using GameLauncher.App.Classes.Logger;
 using GameLauncher.App.Classes.InsiderKit;
 using GameLauncher.App.Classes.LauncherCore.ModNet;
-using GameLauncher.App.Classes.SystemPlatform.Windows;
 using GameLauncher.App.Classes.LauncherCore.FileReadWrite;
 using GameLauncher.App.Classes.LauncherCore.APICheckers;
 using GameLauncher.App.Classes.LauncherCore.Visuals;
@@ -34,6 +33,7 @@ namespace GameLauncher.App
         private int _lastSelectedLanguage;
         private bool _disableProxy;
         private bool _disableDiscordRPC;
+        private bool _enableModNetLegacy;
         private bool _restartRequired;
         private string _newLauncherPath;
         private string _newGameFilesPath;
@@ -110,6 +110,7 @@ namespace GameLauncher.App
             SettingsWordFilterCheck.Font = new Font(DejaVuSans, MainFontSize, FontStyle.Regular);
             SettingsProxyCheckbox.Font = new Font(DejaVuSans, MainFontSize, FontStyle.Regular);
             SettingsDiscordRPCCheckbox.Font = new Font(DejaVuSans, MainFontSize, FontStyle.Regular);
+            SettingsModNetZipDownload.Font = new Font(DejaVuSans, MainFontSize, FontStyle.Regular);
             SettingsGameFilesCurrentText.Font = new Font(DejaVuSansBold, MainFontSize, FontStyle.Bold);
             SettingsGameFilesCurrent.Font = new Font(DejaVuSans, MainFontSize, FontStyle.Regular);
             SettingsCDNCurrentText.Font = new Font(DejaVuSansBold, MainFontSize, FontStyle.Bold);
@@ -188,6 +189,7 @@ namespace GameLauncher.App
             SettingsWordFilterCheck.ForeColor = Theming.SettingsCheckBoxes;
             SettingsProxyCheckbox.ForeColor = Theming.SettingsCheckBoxes;
             SettingsDiscordRPCCheckbox.ForeColor = Theming.SettingsCheckBoxes;
+            SettingsModNetZipDownload.ForeColor = Theming.SettingsCheckBoxes;
 
             /* Bottom Left */
             SettingsLauncherVersion.ForeColor = Theming.FivithTextForeColor;
@@ -320,6 +322,7 @@ namespace GameLauncher.App
 
             _disableProxy = (FileSettingsSave.Proxy == "1");
             _disableDiscordRPC = (FileSettingsSave.RPC == "1");
+            _enableModNetLegacy = (FileSettingsSave.ModNetZip == "1");
 
             if (File.Exists(FileSettingsSave.GameInstallation + "/profwords") || File.Exists(FileSettingsSave.GameInstallation + "/profwords_dis"))
             {
@@ -357,6 +360,7 @@ namespace GameLauncher.App
 
             SettingsProxyCheckbox.Checked = _disableProxy;
             SettingsDiscordRPCCheckbox.Checked = _disableDiscordRPC;
+            SettingsModNetZipDownload.Checked = _enableModNetLegacy;
 
             /*******************************/
             /* Enable/Disable Visuals       /
@@ -537,6 +541,13 @@ namespace GameLauncher.App
                     }
                 }
 
+                _restartRequired = true;
+            }
+
+            String enableModNetZip = (SettingsModNetZipDownload.Checked == true) ? "1" : "0";
+            if (FileSettingsSave.ModNetZip != enableModNetZip)
+            {
+                FileSettingsSave.ModNetZip = (SettingsModNetZipDownload.Checked == true) ? "1" : "0";
                 _restartRequired = true;
             }
 
