@@ -39,6 +39,7 @@ using GameLauncher.App.Classes.Hash;
 using GameLauncher.App.Classes.LauncherCore.Validator.Email;
 using GameLauncher.App.Classes.LauncherCore.Validator.JSON;
 using GameLauncher.App.Classes.SystemPlatform;
+using GameLauncher.App.Classes.LauncherCore.ModNet.JSON;
 
 namespace GameLauncher
 {
@@ -321,7 +322,7 @@ namespace GameLauncher
             Notification.Dispose();
 
             var linksPath = Path.Combine(FileSettingsSave.GameInstallation + "\\.links");
-            ModNetLinksCleanup.CleanLinks(linksPath);
+            ModNetHandler.CleanLinks(linksPath);
 
             /* Leave this here. Its to properly close the launcher from Visual Studio (And Close the Launcher a well) */
             try { this.Close(); } catch { }
@@ -1494,14 +1495,14 @@ namespace GameLauncher
             _disableLogout = true;
             DisablePlayButton();
 
-            ModManager.ResetModDat(FileSettingsSave.GameInstallation);
+            ModNetHandler.ResetModDat(FileSettingsSave.GameInstallation);
 
             if (Directory.Exists(FileSettingsSave.GameInstallation + "/modules")) Directory.Delete(FileSettingsSave.GameInstallation + "/modules", true);
             if (!Directory.Exists(FileSettingsSave.GameInstallation + "/scripts")) Directory.CreateDirectory(FileSettingsSave.GameInstallation + "/scripts");
 
             Log.Core("LAUNCHER: Installing ModNet");
             PlayProgressText.Text = ("Detecting ModNet Support for " + InformationCache.SelectedServerData.Name).ToUpper();
-            String jsonModNet = ModNetReloaded.ModNetSupported(InformationCache.SelectedServerData.IpAddress);
+            String jsonModNet = ModNetHandler.ModNetSupported(InformationCache.SelectedServerData.IpAddress);
 
             if (jsonModNet != String.Empty)
             {

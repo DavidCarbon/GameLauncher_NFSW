@@ -5,7 +5,7 @@ using GameLauncher.App.Classes.LauncherCore.Lists.JSON;
 using GameLauncher.App.Classes.LauncherCore.RPC;
 using GameLauncher.App.Classes.Logger;
 using GameLauncher.App.Classes.SystemPlatform.Linux;
-using GameLauncher.App.Classes.SystemPlatform.Windows;
+using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.IO.Compression;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -197,92 +196,47 @@ namespace GameLauncher.App.Classes.LauncherCore.Global
             };
         }
 
-        public static void ExtractToDirectory(string sourceZipFilePath, string destinationDirectoryName, bool overwrite)
+        /// <summary>
+        /// This C# code reads a key from the windows registry.
+        /// </summary>
+        /// <param name="keyName">
+        /// <returns></returns>
+        public static string RegistryRead(string keyName)
         {
+            string subKey = "SOFTWARE\\Soapbox Race World\\Launcher";
+
             try
             {
-                if (!Directory.Exists(destinationDirectoryName))
-                {
-                    Directory.CreateDirectory(destinationDirectoryName);
-                }
-
-                using (var archive = ZipFile.Open(sourceZipFilePath, ZipArchiveMode.Read))
-                {
-                    if (!overwrite)
-                    {
-                        archive.ExtractToDirectory(destinationDirectoryName);
-                        return;
-                    }
-
-                    DirectoryInfo di = Directory.CreateDirectory(destinationDirectoryName);
-                    string destinationDirectoryFullPath = di.FullName;
-
-                    foreach (ZipArchiveEntry file in archive.Entries)
-                    {
-                        string completeFileName = Path.GetFullPath(Path.Combine(destinationDirectoryFullPath, file.FullName));
-
-                        if (!completeFileName.StartsWith(destinationDirectoryFullPath, StringComparison.OrdinalIgnoreCase))
-                        {
-                            throw new IOException("Trying to extract file outside of destination directory. See this link for more info: https://snyk.io/research/zip-slip-vulnerability");
-                        }
-
-                        if (file.Name == "")
-                        {
-                            Directory.CreateDirectory(Path.GetDirectoryName(completeFileName));
-                            continue;
-                        }
-
-                        Log.Debug("MODNET ZIP: Extracted File " + completeFileName);
-                        file.ExtractToFile(completeFileName, true);
-                    }
-                }
+                RegistryKey sk = Registry.LocalMachine.OpenSubKey(subKey, false);
+                if (sk == null)
+                    return null;
+                else
+                    return sk.GetValue(keyName).ToString();
             }
             catch (Exception error)
             {
-                Log.Error("MODNET ZIP: " + error.Message);
-            }
-            finally
-            {
-                try
-                {
-                    File.Delete(sourceZipFilePath);
-                }
-                catch (Exception error)
-                {
-                    Log.Error("MODNET ZIP: Unable to Delete ZIP File - " + error);
-                }
+                Log.Error("REGISTRYKEY: READ " + error.Message);
+                return null;
             }
         }
 
-        public void ExtractZipFileToDirectory(string sourceZipFilePath, string destinationDirectoryName, bool overwrite)
+        /// <summary>
+        /// This C# code writes a key to the windows registry.
+        /// </summary>
+        /// <param name="keyName">
+        /// <param name="value">
+        public static void RegistryWrite(string keyName, string value)
         {
-            using (var archive = ZipFile.Open(sourceZipFilePath, ZipArchiveMode.Read))
+            string subKey = "SOFTWARE\\Soapbox Race World\\Launcher";
+
+            try
             {
-                if (!overwrite)
-                {
-                    archive.ExtractToDirectory(destinationDirectoryName);
-                    return;
-                }
-
-                DirectoryInfo di = Directory.CreateDirectory(destinationDirectoryName);
-                string destinationDirectoryFullPath = di.FullName;
-
-                foreach (ZipArchiveEntry file in archive.Entries)
-                {
-                    string completeFileName = Path.GetFullPath(Path.Combine(destinationDirectoryFullPath, file.FullName));
-
-                    if (!completeFileName.StartsWith(destinationDirectoryFullPath, StringComparison.OrdinalIgnoreCase))
-                    {
-                        throw new IOException("Trying to extract file outside of destination directory. See this link for more info: https://snyk.io/research/zip-slip-vulnerability");
-                    }
-
-                    if (file.Name == "")
-                    {// Assuming Empty for Directory
-                        Directory.CreateDirectory(Path.GetDirectoryName(completeFileName));
-                        continue;
-                    }
-                    file.ExtractToFile(completeFileName, true);
-                }
+                RegistryKey sk = Registry.LocalMachine.CreateSubKey(subKey, true);
+                sk.SetValue(keyName, value);
+            }
+            catch (Exception error)
+            {
+                Log.Error("REGISTRYKEY: WRITE " + error.Message);
             }
         }
 

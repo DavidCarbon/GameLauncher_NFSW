@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace GameLauncher.App.Classes.LauncherCore.APICheckers
 {
-    class APIStatusChecker
+    class APIChecker
     {
         public static APIStatus CheckStatus(string APIURI)
         {
@@ -103,6 +103,67 @@ namespace GameLauncher.App.Classes.LauncherCore.APICheckers
                 }
             }
             return APIStatus.Null;
+        }
+    }
+
+    class VisualsAPIChecker
+    {
+        public static bool UnitedAPI = true;
+
+        public static bool CarbonAPI = true;
+
+        public static bool CarbonAPITwo = true;
+
+        public static bool WOPLAPI = true;
+
+        public static void PingAPIStatus()
+        {
+            switch (APIChecker.CheckStatus(URLs.Main + "/serverlist.json"))
+            {
+                case APIStatus.Online:
+                    break;
+                default:
+                    UnitedAPI = false;
+                    break;
+            }
+
+            if (UnitedAPI == false)
+            {
+                switch (APIChecker.CheckStatus(URLs.Static + "/serverlist.json"))
+                {
+                    case APIStatus.Online:
+                        break;
+                    default:
+                        CarbonAPI = false;
+                        break;
+                }
+            }
+
+            if (CarbonAPI == false)
+            {
+                switch (APIChecker.CheckStatus(URLs.Static_Alt + "/serverlist.json"))
+                {
+                    case APIStatus.Online:
+                        break;
+                    default:
+                        CarbonAPITwo = false;
+                        break;
+                }
+            }
+
+            if (CarbonAPITwo == false)
+            {
+                switch (APIChecker.CheckStatus(URLs.WOPL + "/serverlist.json"))
+                {
+                    case APIStatus.Online:
+                        break;
+                    default:
+                        WOPLAPI = false;
+                        break;
+                }
+            }
+
+            FunctionStatus.IsVisualAPIsChecked = true;
         }
     }
 }

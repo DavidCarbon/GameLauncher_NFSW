@@ -9,13 +9,13 @@ using System.Xml;
 
 namespace GameLauncher.App.Classes.LauncherCore.Downloader
 {
-    internal class DownloadManager
+    internal class DownloaderHandler
     {
         public const int MaxWorkers = 3;
         public const int MaxActiveChunks = 16;
         private static int _workerCount;
         private int _maxWorkers;
-        readonly Dictionary<string, DownloadManager.DownloadItem> _downloadList;
+        readonly Dictionary<string, DownloaderHandler.DownloadItem> _downloadList;
         readonly LinkedList<string> _downloadQueue;
         readonly List<BackgroundWorker> _workers;
         private int _freeChunks;
@@ -27,20 +27,20 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
             get { return this._managerRunning; }
         }
 
-        static DownloadManager()
+        static DownloaderHandler()
         {
-            DownloadManager._workerCount = 0;
+            DownloaderHandler._workerCount = 0;
         }
 
-        public DownloadManager() : this(3, 16)
+        public DownloaderHandler() : this(3, 16)
         {
         }
 
-        public DownloadManager(int maxWorkers, int maxActiveChunks)
+        public DownloaderHandler(int maxWorkers, int maxActiveChunks)
         {
             this._maxWorkers = maxWorkers;
             this._freeChunks = maxActiveChunks;
-            this._downloadList = new Dictionary<string, DownloadManager.DownloadItem>();
+            this._downloadList = new Dictionary<string, DownloaderHandler.DownloadItem>();
             this._downloadQueue = new LinkedList<string>();
             this._workers = new List<BackgroundWorker>();
         }
@@ -69,7 +69,7 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
                                     {
                                         this._workers.Remove((BackgroundWorker)sender);
                                     }
-                                    DownloadManager._workerCount--;
+                                    DownloaderHandler._workerCount--;
                                     break;
                                 }
                             }
@@ -85,9 +85,9 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
                             }
                             lock (this._downloadList[value])
                             {
-                                if (this._downloadList[value].Status != DownloadManager.DownloadStatus.Canceled)
+                                if (this._downloadList[value].Status != DownloaderHandler.DownloadStatus.Canceled)
                                 {
-                                    this._downloadList[value].Status = DownloadManager.DownloadStatus.Downloading;
+                                    this._downloadList[value].Status = DownloaderHandler.DownloadStatus.Downloading;
                                 }
                             }
                             while (webClient.IsBusy)
@@ -95,26 +95,26 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
                                 Thread.Sleep(100);
                             }
                             webClient.DownloadDataAsync(new Uri(value), value);
-                            DownloadManager.DownloadStatus status = DownloadManager.DownloadStatus.Downloading;
-                            while (status == DownloadManager.DownloadStatus.Downloading)
+                            DownloaderHandler.DownloadStatus status = DownloaderHandler.DownloadStatus.Downloading;
+                            while (status == DownloaderHandler.DownloadStatus.Downloading)
                             {
                                 status = this._downloadList[value].Status;
-                                if (status == DownloadManager.DownloadStatus.Canceled)
+                                if (status == DownloaderHandler.DownloadStatus.Canceled)
                                 {
                                     break;
                                 }
                                 Thread.Sleep(100);
                             }
-                            if (status == DownloadManager.DownloadStatus.Canceled)
+                            if (status == DownloaderHandler.DownloadStatus.Canceled)
                             {
                                 webClient.CancelAsync();
                             }
                             lock (this._workers)
                             {
-                                if (DownloadManager._workerCount > this._maxWorkers || !this._managerRunning)
+                                if (DownloaderHandler._workerCount > this._maxWorkers || !this._managerRunning)
                                 {
                                     this._workers.Remove((BackgroundWorker)sender);
-                                    DownloadManager._workerCount--;
+                                    DownloaderHandler._workerCount--;
                                     break;
                                 }
                             }
@@ -128,7 +128,7 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
                 lock (this._workers)
                 {
                     this._workers.Remove((BackgroundWorker)sender);
-                    DownloadManager._workerCount--;
+                    DownloaderHandler._workerCount--;
                 }
             }
         }
@@ -158,7 +158,7 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
                             this._freeChunks++;
                         }
                     }
-                    this._downloadList[key].Status = DownloadManager.DownloadStatus.Canceled;
+                    this._downloadList[key].Status = DownloaderHandler.DownloadStatus.Canceled;
                     this._downloadList[key].Data = null;
                 }
             }
@@ -184,7 +184,7 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
                             this._freeChunks++;
                         }
                     }
-                    this._downloadList[fileName].Status = DownloadManager.DownloadStatus.Canceled;
+                    this._downloadList[fileName].Status = DownloaderHandler.DownloadStatus.Canceled;
                     this._downloadList[fileName].Data = null;
                 }
             }
@@ -193,7 +193,7 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
         public void Clear()
         {
             this.CancelAllDownloads();
-            while (DownloadManager._workerCount > 0)
+            while (DownloaderHandler._workerCount > 0)
             {
                 Thread.Sleep(100);
             }
@@ -214,15 +214,15 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
                     {
                         lock (this._downloadList[str])
                         {
-                            if (this._downloadList[str].Status == DownloadManager.DownloadStatus.Canceled || this._maxWorkers <= 1)
+                            if (this._downloadList[str].Status == DownloaderHandler.DownloadStatus.Canceled || this._maxWorkers <= 1)
                             {
                                 this._downloadList[str].Data = null;
-                                this._downloadList[str].Status = DownloadManager.DownloadStatus.Canceled;
+                                this._downloadList[str].Status = DownloaderHandler.DownloadStatus.Canceled;
                             }
                             else
                             {
                                 this._downloadList[str].Data = null;
-                                this._downloadList[str].Status = DownloadManager.DownloadStatus.Queued;
+                                this._downloadList[str].Status = DownloaderHandler.DownloadStatus.Queued;
                                 lock (this._downloadQueue)
                                 {
                                     this._downloadQueue.AddLast(str);
@@ -244,11 +244,11 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
             {
                 lock (this._downloadList[str])
                 {
-                    if (this._downloadList[str].Status != DownloadManager.DownloadStatus.Downloaded)
+                    if (this._downloadList[str].Status != DownloaderHandler.DownloadStatus.Downloaded)
                     {
                         this._downloadList[str].Data = new byte[(int)e.Result.Length];
                         Buffer.BlockCopy(e.Result, 0, this._downloadList[str].Data, 0, (int)e.Result.Length);
-                        this._downloadList[str].Status = DownloadManager.DownloadStatus.Downloaded;
+                        this._downloadList[str].Status = DownloaderHandler.DownloadStatus.Downloaded;
                     }
                 }
             }
@@ -256,14 +256,14 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
 
         public byte[] GetFile(string fileName)
         {
-            DownloadManager.DownloadStatus status;
+            DownloaderHandler.DownloadStatus status;
             byte[] data = null;
             this.ScheduleFile(fileName);
             lock (this._downloadList[fileName])
             {
                 status = this._downloadList[fileName].Status;
             }
-            while (status != DownloadManager.DownloadStatus.Downloaded && status != DownloadManager.DownloadStatus.Canceled)
+            while (status != DownloaderHandler.DownloadStatus.Downloaded && status != DownloaderHandler.DownloadStatus.Canceled)
             {
                 Thread.Sleep(100);
                 lock (this._downloadList[fileName])
@@ -271,7 +271,7 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
                     status = this._downloadList[fileName].Status;
                 }
             }
-            if (this._downloadList[fileName].Status == DownloadManager.DownloadStatus.Downloaded)
+            if (this._downloadList[fileName].Status == DownloaderHandler.DownloadStatus.Downloaded)
             {
                 lock (this._downloadList[fileName])
                 {
@@ -286,13 +286,13 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
             return data;
         }
 
-        public DownloadManager.DownloadStatus? GetStatus(string fileName)
+        public DownloaderHandler.DownloadStatus? GetStatus(string fileName)
         {
             if (!this._downloadList.ContainsKey(fileName))
             {
                 return null;
             }
-            return new DownloadManager.DownloadStatus?(this._downloadList[fileName].Status);
+            return new DownloaderHandler.DownloadStatus?(this._downloadList[fileName].Status);
         }
 
         public void Initialize(XmlDocument doc, string serverPath)
@@ -314,7 +314,7 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
                 string str1 = string.Format("{0}/section{1}.dat", serverPath, i);
                 if (!this._downloadList.ContainsKey(str1))
                 {
-                    this._downloadList.Add(str1, new DownloadManager.DownloadItem());
+                    this._downloadList.Add(str1, new DownloaderHandler.DownloadItem());
                 }
             }
         }
@@ -323,12 +323,12 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
         {
             if (this._downloadList.ContainsKey(fileName))
             {
-                DownloadManager.DownloadStatus status = DownloadManager.DownloadStatus.Queued;
+                DownloaderHandler.DownloadStatus status = DownloaderHandler.DownloadStatus.Queued;
                 lock (this._downloadList[fileName])
                 {
                     status = this._downloadList[fileName].Status;
                 }
-                if (status != DownloadManager.DownloadStatus.Queued && status != DownloadManager.DownloadStatus.Canceled)
+                if (status != DownloaderHandler.DownloadStatus.Queued && status != DownloaderHandler.DownloadStatus.Canceled)
                 {
                     return;
                 }
@@ -346,18 +346,18 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
                 }
                 lock (this._downloadList[fileName])
                 {
-                    this._downloadList[fileName].Status = DownloadManager.DownloadStatus.Queued;
+                    this._downloadList[fileName].Status = DownloaderHandler.DownloadStatus.Queued;
                 }
             }
             else
             {
-                this._downloadList.Add(fileName, new DownloadManager.DownloadItem());
+                this._downloadList.Add(fileName, new DownloaderHandler.DownloadItem());
                 lock (this._downloadQueue)
                 {
                     this._downloadQueue.AddLast(fileName);
                 }
             }
-            if (this._managerRunning && DownloadManager._workerCount < this._maxWorkers)
+            if (this._managerRunning && DownloaderHandler._workerCount < this._maxWorkers)
             {
                 lock (this._workers)
                 {
@@ -366,7 +366,7 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
                     backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(this.BackgroundWorker_RunWorkerComplete);
                     backgroundWorker.RunWorkerAsync();
                     this._workers.Add(backgroundWorker);
-                    DownloadManager._workerCount++;
+                    DownloaderHandler._workerCount++;
                 }
             }
         }
@@ -376,14 +376,14 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
             this._managerRunning = true;
             lock (this._workers)
             {
-                while (DownloadManager._workerCount < this._maxWorkers)
+                while (DownloaderHandler._workerCount < this._maxWorkers)
                 {
                     BackgroundWorker backgroundWorker = new BackgroundWorker();
                     backgroundWorker.DoWork += new DoWorkEventHandler(this.BackgroundWorker_DoWork);
                     backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(this.BackgroundWorker_RunWorkerComplete);
                     backgroundWorker.RunWorkerAsync();
                     this._workers.Add(backgroundWorker);
-                    DownloadManager._workerCount++;
+                    DownloaderHandler._workerCount++;
                 }
             }
         }
@@ -395,7 +395,7 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
 
         private class DownloadItem
         {
-            public DownloadManager.DownloadStatus Status;
+            public DownloaderHandler.DownloadStatus Status;
 
             private byte[] _data;
 
@@ -407,7 +407,7 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
 
             public DownloadItem()
             {
-                this.Status = DownloadManager.DownloadStatus.Queued;
+                this.Status = DownloaderHandler.DownloadStatus.Queued;
             }
         }
 

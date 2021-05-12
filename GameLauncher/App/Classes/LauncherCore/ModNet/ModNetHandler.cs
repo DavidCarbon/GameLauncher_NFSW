@@ -1,13 +1,36 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using GameLauncher.App.Classes.LauncherCore.FileReadWrite;
+using GameLauncher.App.Classes.LauncherCore.Global;
 using GameLauncher.App.Classes.Logger;
 
 namespace GameLauncher.App.Classes.LauncherCore.ModNet
 {
-    class ModNetLinksCleanup
+    class ModNetHandler
     {
+        public static void ResetModDat(string gameDir)
+        {
+            File.Delete(Path.Combine(gameDir, "ModManager.dat"));
+        }
+
+        public static string ModNetSupported(string ServerIP)
+        {
+            try
+            {
+                FunctionStatus.TLS();
+                Uri newModNetUri = new Uri(ServerIP + "/Modding/GetModInfo");
+                WebClient x = new WebClient();
+                return x.DownloadString(newModNetUri);
+            }
+            catch (Exception)
+            {
+                return String.Empty;
+            }
+        }
+
         public static int FileErrors = 0;
+
         public static void CleanLinks(string linksPath)
         {
             try

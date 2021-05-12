@@ -9,33 +9,33 @@ using System.Xml;
 
 namespace GameLauncher.App.Classes.LauncherCore.Downloader
 {
-    internal class HashManager
+    internal class DownloaderHashReader
     {
         public const int MaxWorkers = 3;
         public const string HashFileName = "HashFile";
-        readonly Dictionary<string, HashManager.HashTuple> _fileList;
+        readonly Dictionary<string, DownloaderHashReader.HashTuple> _fileList;
         readonly Queue<string> _queueHash;
         private readonly static object _queueHashLock;
         private static int _workerCount;
         readonly bool _useCache = true;
-        readonly static HashManager _instance;
+        readonly static DownloaderHashReader _instance;
 
-        internal static HashManager Instance
+        internal static DownloaderHashReader Instance
         {
-            get { return HashManager._instance; }
+            get { return DownloaderHashReader._instance; }
         }
 
-        static HashManager()
+        static DownloaderHashReader()
         {
-            HashManager._queueHashLock = new object();
-            HashManager._workerCount = 0;
-            HashManager._instance = new HashManager();
+            DownloaderHashReader._queueHashLock = new object();
+            DownloaderHashReader._workerCount = 0;
+            DownloaderHashReader._instance = new DownloaderHashReader();
         }
 
-        private HashManager()
+        private DownloaderHashReader()
         {
             this._useCache = true;
-            this._fileList = new Dictionary<string, HashManager.HashTuple>();
+            this._fileList = new Dictionary<string, DownloaderHashReader.HashTuple>();
             this._queueHash = new Queue<string>();
         }
 
@@ -43,16 +43,16 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
         {
             while (true)
             {
-                lock (HashManager._queueHashLock)
+                lock (DownloaderHashReader._queueHashLock)
                 {
                     if (this._queueHash.Count == 0)
                     {
-                        HashManager._workerCount--;
+                        DownloaderHashReader._workerCount--;
                         break;
                     }
                 }
                 string str = null;
-                lock (HashManager._queueHashLock)
+                lock (DownloaderHashReader._queueHashLock)
                 {
                     str = this._queueHash.Dequeue();
                 }
@@ -101,7 +101,7 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
             {
                 this._queueHash.Clear();
             }
-            while (HashManager._workerCount > 0)
+            while (DownloaderHashReader._workerCount > 0)
             {
                 Thread.Sleep(100);
             }
@@ -166,12 +166,12 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
                 string str1 = string.Concat(innerText, "/", str);
                 if (xmlNodes.SelectSingleNode("hash") != null)
                 {
-                    this._fileList.Add(str1, new HashManager.HashTuple(string.Empty, xmlNodes.SelectSingleNode("hash").InnerText));
+                    this._fileList.Add(str1, new DownloaderHashReader.HashTuple(string.Empty, xmlNodes.SelectSingleNode("hash").InnerText));
                     this._queueHash.Enqueue(str1);
                 }
                 else
                 {
-                    this._fileList.Add(str1, new HashManager.HashTuple(null, null));
+                    this._fileList.Add(str1, new DownloaderHashReader.HashTuple(null, null));
                 }
             }
             if (this._useCache && File.Exists(string.Concat("HashFile", hashFileNameSuffix)))
@@ -240,14 +240,14 @@ namespace GameLauncher.App.Classes.LauncherCore.Downloader
                     File.Delete(string.Concat("HashFile", hashFileNameSuffix));
                 }
             }
-            HashManager._workerCount = 0;
-            while (HashManager._workerCount < maxWorkers && this._queueHash.Count > 0)
+            DownloaderHashReader._workerCount = 0;
+            while (DownloaderHashReader._workerCount < maxWorkers && this._queueHash.Count > 0)
             {
                 BackgroundWorker backgroundWorker = new BackgroundWorker();
                 backgroundWorker.DoWork += new DoWorkEventHandler(this.BackgroundWorker_DoWork);
                 backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(this.BackgroundWorker_RunWorkerComplete);
                 backgroundWorker.RunWorkerAsync();
-                HashManager._workerCount++;
+                DownloaderHashReader._workerCount++;
             }
         }
 
